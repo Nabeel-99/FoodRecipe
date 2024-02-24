@@ -94,11 +94,11 @@ const HeroSection = ({lightMode}) => {
          <div className="relative">
             <div className="flex justify-end">
                 <img src={food} className="w-[341px] h-[254px] object-cover rounded-tl-[35px] rounded-bl-[8px] md:w-[541px] md:h-[384px] lg:w-[541px] lg:h-[384px]"
-                style={{boxShadow: '-10px -10px 20px rgba(60, 65, 64, 0.5)'}}/>
+                style={{boxShadow: '-10px -10px 20px rgba(60, 65, 64, 0.5)'}} alt="food"/>
             </div>
             <div className="absolute top-40 md:top-10">
                 <img src={foodRecipe} className="w-[231px] h-[205px] object-cover rounded-tr-[35px] rounded-br-[8px] md:w-[521px] md:h-[343px] lg:w-[521px] lg:h-[343px]" 
-                style={{boxShadow: '25px -20px 45px rgba(183, 101, 26, 0.5)' }}/>
+                style={{boxShadow: '25px -20px 45px rgba(183, 101, 26, 0.5)' }} alt="foodRecipe"/>
             </div>
             
          </div>

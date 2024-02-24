@@ -14,10 +14,10 @@ const Navbar = ({lightMode, toggleMode, handleCloseForm}) => {
   }
   return (
     <div className="flex justify-between items-start w-screen py-6 px-2 md:px-12">
-       <div><img src={lightMode ? logo: logoWhite}/></div>
+       <div><img src={lightMode ? logo: logoWhite} alt="logo"/></div>
        {/* burger menu */}
        <div>
-        {lightMode ? <button id="moon" onClick={toggleMode}><FontAwesomeIcon icon={faMoon} className="w-6 h-7 px-3 md:hidden"/></button>: <button id="sun" onClick={toggleMode}><img src={sun} className="w-6 h-6 mr-3 md:hidden"/></button>  }
+        {lightMode ? <button id="moon" onClick={toggleMode}><FontAwesomeIcon icon={faMoon} className="w-6 h-7 px-3 md:hidden"/></button>: <button id="sun" onClick={toggleMode}><img src={sun} className="w-6 h-6 mr-3 md:hidden" alt="sun"/></button>  }
         <button onClick={displayBurgerMenu} className="transition duration-75 ease-in-out">
           <FontAwesomeIcon icon={burgerMenu ? faXmark : faBars} className="w-6 h-7  mt-3 px-3 md:hidden "/>
         </button>
@@ -47,7 +47,7 @@ const Navbar = ({lightMode, toggleMode, handleCloseForm}) => {
        <div className="hidden md:flex items-center gap-10">
         <div><button onClick={handleCloseForm} className={lightMode ? "p-1 w-32 rounded-md bg-transparent border border-black" : "p-1 w-32 rounded-md bg-transparent border border-white"}>Sign in</button></div>
         <div className="flex gap-5 items-center justify-center justify-items-center">
-          {lightMode ? <button id="moon" onClick={toggleMode}><FontAwesomeIcon icon={faMoon} className="w-6 h-6"/></button> :  <button id="sun" onClick={toggleMode}><img src={sun} className="object-cover w-6 h-7"/></button>  }
+          {lightMode ? <button id="moon" onClick={toggleMode}><FontAwesomeIcon icon={faMoon} className="w-6 h-6"/></button> :  <button id="sun" onClick={toggleMode}><img src={sun} className="object-cover w-6 h-7" alt="sun"/></button>  }
           <Link><FontAwesomeIcon icon={faGithub} className={lightMode ? 'w-6 h-6 text-black'  : 'w-6 h-6 text-white'} /></Link>
         </div>
        </div>
