@@ -16,7 +16,7 @@ const ContentSection = ({foodData, handleRegenerate, lightMode}) => {
                          <div className="absolute right-0 px-4 py-2"><button><FontAwesomeIcon icon={faHeart} className="w-6 h-6" style={{color: 'white'}}/></button></div>
                          <img src={food.image} className=" object-cover w-[390px] h-[268px] border-r-2 border-l-2 border-t-2 border-white bg-black rounded-tl-md rounded-tr-md md:w-[484px] md:h-[370px]" alt="food Image"/>
                         <div className="bg-black absolute bottom-0 right-0 left-0 h-[33px] w-[390px] border rounded-bl-2xl rounded-br-2xl shadow-2xl flex items-center justify-center md:w-[484px] md:h-[47px]">
-                             <p className="font-semibold text-xs">{food.title}</p>
+                             <p className="font-semibold text-xs text-white">{food.title}</p>
                         </div>
                     </div>
                   <div className="md:flex gap-60 mt-8">
