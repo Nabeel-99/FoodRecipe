@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import food from "../assets/food.jpg"
-import recipe from "../assets/recipe.jpg"
+import foodRecipe from "../assets/recipe.jpg"
 import ContentSection from "./ContentSection"
 import { faSpinner } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Link } from "react-router-dom"
 
-const HeroSection = ({darkMode}) => {
+const HeroSection = ({lightMode}) => {
     const API_KEY='1d604e2dfc3d434a8f8a706d553d9933'
     const [foodData, setFoodData] = useState([])
     const [showSpinner, setShowSpinner] = useState(false)
@@ -30,10 +30,15 @@ const HeroSection = ({darkMode}) => {
     
                 if(data.extendedIngredients){
                     data.extendedIngredients.forEach(ingredient => {
-                       recipes.push({aisle: ingredient.aisle})
-                       instructions.push({instruction: ingredient.original})
+                        if(!recipes.some(recipe => recipe.aisle === ingredient.aisle)){
+                            recipes.push({aisle: ingredient.aisle})
+                        }
+                        if(!instructions.some(instruction => instruction.original === ingredient.original)){
+                            instructions.push({instruction: ingredient.original})
+                        }
                     })
                 }
+                
                 const timeStamp = new Date().getTime() 
                 setFoodData([
                     {  
@@ -82,24 +87,24 @@ const HeroSection = ({darkMode}) => {
          <p className="mx-12 font-medium mt-2">Simply your meal decisions and explore delightful suggestios with just a click.</p>
        </div> 
        <div>
-        <button onClick={handleGenerate} className={darkMode ? "bg-[#0EA5E9] text-white p-1 w-72 h-12 rounded-md shadow-xl" : "bg-black text-white p-1 w-72 h-12 rounded-md shadow-xl"}>Generate</button>
+        <button onClick={handleGenerate} className={lightMode ? "bg-black text-white p-1 w-72 h-12 rounded-md shadow-xl" : "bg-[#0EA5E9] text-white p-1 w-72 h-12 rounded-md shadow-xl" }>Generate</button>
        </div>
 
-       <div className="bg-[url('./assets/grid-mobile.png')] bg-cover h-96 md:bg-[url('./assets/grid.png')] ">
+       <div className={ lightMode ? "bg-[url('./assets/grid-mobile.png')] bg-cover h-96 md:bg-[url('./assets/grid.png')] " : "bg-[url('./assets/grid-mobile-darkM.png')] bg-cover h-96 md:bg-[url('./assets/grid-darkM.png')] "}>
          <div className="relative">
             <div className="flex justify-end">
                 <img src={food} className="w-[341px] h-[254px] object-cover rounded-tl-[35px] rounded-bl-[8px] md:w-[541px] md:h-[384px] lg:w-[541px] lg:h-[384px]"
                 style={{boxShadow: '-10px -10px 20px rgba(60, 65, 64, 0.5)'}}/>
             </div>
-            <div className="absolute top-40 md:top-12">
-                <img src={recipe} className="w-[231px] h-[205px] object-cover rounded-tr-[35px] rounded-br-[8px] md:w-[521px] md:h-[343px] lg:w-[521px] lg:h-[343px]" 
+            <div className="absolute top-40 md:top-10">
+                <img src={foodRecipe} className="w-[231px] h-[205px] object-cover rounded-tr-[35px] rounded-br-[8px] md:w-[521px] md:h-[343px] lg:w-[521px] lg:h-[343px]" 
                 style={{boxShadow: '25px -20px 45px rgba(183, 101, 26, 0.5)' }}/>
             </div>
             
          </div>
           
        </div>
-       <div className="absolute bottom-0 left-0 right-0 h-12  " style={{backgroundImage: 'linear-gradient(to bottom, rgba(245,245,245, 0.09), rgba(237, 237, 240, 1) 80%)'}}></div>
+       <div className="absolute bottom-0 left-0 right-0 h-12" style={{backgroundImage: lightMode ? 'linear-gradient(to bottom, rgba(245,245,245, 0.09), rgba(237, 237, 240, 1) 80%)' :  'linear-gradient(to bottom, rgba(13,23,52, 0.09), rgba(13, 23, 52, 1) 80%)' }}></div>
     </div>
    
     {foodData.length > 0 ? 
