@@ -4,7 +4,7 @@ import { faHeart} from "@fortawesome/free-regular-svg-icons"
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-const ContentSection = ({foodData, handleRegenerate, lightMode}) => {
+const ContentSection = ({foodData, handleRegenerate}) => {
   const spinnerSectionRef = React.useRef(null); 
   return (
     <>
