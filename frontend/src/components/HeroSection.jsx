@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import food from "../assets/food.jpg"
 import foodRecipe from "../assets/recipe.jpg"
 import ContentSection from "./ContentSection"
 import { faSpinner } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Link } from "react-router-dom"
+
 
 const HeroSection = ({lightMode}) => {
     const API_KEY='1d604e2dfc3d434a8f8a706d553d9933'
