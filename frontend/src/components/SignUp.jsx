@@ -1,6 +1,6 @@
 import  { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
-import { faCircle, faXmark, faSpinner } from "@fortawesome/free-solid-svg-icons"
+import {  faXmark, } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
 
@@ -8,19 +8,19 @@ import axios from "axios"
 const SignUp = () => {
 
   const navigate = useNavigate()
-  const [isSigningUp, setIsSigningUp] = useState(false)
   const [formData, setFormData] = useState({
      email: '',
      firstName: '',
      lastName: '',
      password: '',
   })
+  const [error, setError] = useState("")
 
 
   const handleSignUpSubmit = async (e) => {
     e.preventDefault()
     try {
-       const response = await axios.post('http://localhost:8000/signup', {
+       const response = await axios.post('http://localhost:8080/api/users', {
             email: formData.email,
             firstName: formData.firstName,
             lastName: formData.lastName,
@@ -35,7 +35,10 @@ const SignUp = () => {
            })
         navigate('/signin')
     } catch (error) {
-        console.log(`error : ${error}`)
+        if(error.response && error.response.status >= 400 && error.response.status <= 500){
+            setError(error.response.data.message)
+        }
+        console.log(error)
     }
   }
 
@@ -62,8 +65,9 @@ const SignUp = () => {
                 <label className="mb-2" htmlFor="password">Password</label>
                  <input className=" px-3 p-1 rounded-sm border border-black" type="password" id="password" value={formData.password} onChange={(e) => setFormData({...formData, password:e.target.value})} required/>
             </div>
+            {error && <div className="text-red"> {error} </div>}
             <div className="flex items-center justify-center">
-                <button className="bg-green-500 text-white w-36 p-2 rounded-md border hover:border-blue-300">Sign up</button>
+                <button type="submit" className="bg-green-500 text-white w-36 p-2 rounded-md border hover:border-blue-300">Sign up</button>
             </div>
             <div className="flex gap-1 items-center justify-center">
                 <p>Already have an account?</p>

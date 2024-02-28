@@ -7,28 +7,32 @@ import axios from "axios"
 
 const SignIn = () => {
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [formData, setFormData] = useState({
-     loginEmail: '',
-     loginPassword: ''
+     email: '',
+     password: ''
   })
-  
+  const [error, setErrror] = useState("")
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault()
     try {
-       const response =  await axios.post("http://localhost:8000/signin", {
-            loginEmail: formData.loginEmail,
-            loginPassword: formData.loginPassword
+       const response =  await axios.post("http://localhost:8080/api/auth", {
+            email: formData.email,
+            password: formData.password
             
         })
         console.log(response.data)
-        if(response.data === "Success!"){
-          navigate('/')
-        }
+      
+         localStorage.setItem("token", response.data);
+         window.location = "/"
+        
      
     } catch (error) {
-        console.log(error)
+       if(error.response && error.response.status >= 400 && error.response.status <= 500){
+        setErrror(error.response.data.message)
+       }
+       console.log(error)
     }
   }
 
@@ -40,13 +44,14 @@ const SignIn = () => {
             <h2 className="text-3xl font-bold">Sign in</h2>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="email">Email Address</label>
-                 <input className=" px-3 p-1 rounded-sm border border-black" type="email" id="email" value={formData.loginEmail} onChange={(e) => setFormData({...formData, loginEmail:e.target.value})} required/>
+                 <input className=" px-3 p-1 rounded-sm border border-black" type="email" id="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required/>
             </div>
            
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="password">Password</label>
-                 <input className=" px-3 p-1 rounded-sm border border-black" type="password" id="password" min={8} max={16} value={formData.loginPassword} onChange={(e) => setFormData({...formData, loginPassword:e.target.value})} required/>
+                 <input className=" px-3 p-1 rounded-sm border border-black" type="password" id="password" min={8} max={16} value={formData.password} onChange={(e) => setFormData({...formData, password:e.target.value})} required/>
             </div>
+            {error && <div className="text-red">{error}</div>}
             <div className="flex items-center justify-center">
                 <button className="bg-green-500 text-white w-36 p-2 rounded-md border hover:border-blue-300">Login</button>
             </div>

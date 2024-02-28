@@ -7,6 +7,8 @@ import ContentSection from "./components/ContentSection.jsx"
 import Footer from "./components/Footer.jsx"
 import SignIn from "./components/SignIn.jsx"
 import SignUp from "./components/SignUp.jsx"
+import Favorites from "./components/Favorites.jsx"
+import Details from "./components/Details.jsx"
 
 function App() {
 
@@ -53,12 +55,12 @@ function App() {
             <SignIn />
         </div>
         </>}/>
+        <Route path="/favorites" element={<Favorites/>}/>
+        <Route path="/details" element={<Details/>} />
       </Routes>
-    
-      <Footer lightMode={lightMode}/>
       </div>
     </Router>
-      
+    <Footer lightMode={lightMode}/>
     </>
   )
 }
