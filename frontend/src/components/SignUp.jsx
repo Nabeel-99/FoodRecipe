@@ -16,36 +16,28 @@ const SignUp = () => {
   })
   const [error, setError] = useState("")
 
-
-  const handleSignUpSubmit = async (e) => {
+  const handleSignUpSubmit = async(e) => {
     e.preventDefault()
     try {
-       const response = await axios.post('http://localhost:8080/api/users', {
+        const response = await axios.post('http://localhost:8000/api/users/signup', {
             email: formData.email,
             firstName: formData.firstName,
             lastName: formData.lastName,
             password: formData.password
-        });
-        console.log(response.data)
-           setFormData({
-            email: '',
-            firstName: '',
-            lastName: '',
-            password: ''
-           })
-        navigate('/signin')
+        })
+        console.log(response.data);
+        console.log(response.message)
+        navigate("/signin")
     } catch (error) {
-        if(error.response && error.response.status >= 400 && error.response.status <= 500){
+        if(error.response && error.response.status >= 400 && error.response.status < 500){
             setError(error.response.data.message)
         }
         console.log(error)
     }
   }
-
- 
   return (
     <>
-    <div className="absolute top-0 left-0 right-0 flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center h-full">
         <div className="<"><Link to="/"><FontAwesomeIcon icon={faXmark} className="w-8 h-8 border rounded-full p-1 text-red-500 bg-white "/></Link></div>
          <form action="POST" className="bg-white text-black text-left flex flex-col gap-4 p-5 rounded-md w-full z-10  md:w-[30rem] md:mt-5" onSubmit={handleSignUpSubmit}>
             <h2 className="text-3xl font-bold">Create account</h2>
@@ -65,7 +57,7 @@ const SignUp = () => {
                 <label className="mb-2" htmlFor="password">Password</label>
                  <input className=" px-3 p-1 rounded-sm border border-black" type="password" id="password" value={formData.password} onChange={(e) => setFormData({...formData, password:e.target.value})} required/>
             </div>
-            {error && <div className="text-red"> {error} </div>}
+            {error && <div className="border bg-red-500 text-white"> {error} </div>}
             <div className="flex items-center justify-center">
                 <button type="submit" className="bg-green-500 text-white w-36 p-2 rounded-md border hover:border-blue-300">Sign up</button>
             </div>

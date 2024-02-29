@@ -40,7 +40,7 @@ const Favorites = () => {
       <div className="flex flex-col items-center md:grid md:grid-cols-3 gap-10">
       {favorites.map((favorite) => (
          <div className="flex flex-col  shadow-2xl rounded-br-xl rounded-bl-xl bg-gray-200"  key={favorite._id}>
-            <Link to="/details"><img src={favorite.image} className="object-cover w-[390px] h-[268px] border-r-2 border-l-2 border-t-2 border-white rounded-tl-md rounded-tr-md " alt="food image"/></Link>
+            <Link to={`/details/${favorite._id}`}><img src={favorite.image} className="object-cover w-[390px] h-[268px] border-r-2 border-l-2 border-t-2 border-white rounded-tl-md rounded-tr-md " alt="food image"/></Link>
             <div className="p-1">
               <p className="font-semibold text-xs text-black">{favorite.title}</p>
             </div>

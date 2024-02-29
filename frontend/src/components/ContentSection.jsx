@@ -8,40 +8,54 @@ import axios from "axios"
 
 const ContentSection = ({foodData, handleRegenerate}) => {
   const spinnerSectionRef = React.useRef(null); 
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [addToFavorite, setAddToFavorite] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
+  const [favoriteMessageDisplay, setFavoriteMessageDisplay] = useState(false)
+
   let favoriteTimeout;
   const handleToggle = () => {
-   setIsLiked(!isLiked)
-
-   if(!isLiked){
-    
-    setIsFavorite(true)
-    favoriteTimeout = setTimeout(() => {
-      setIsFavorite(false)
-    }, 2000);
-
-   }else{
-      clearInterval(favoriteTimeout)
-      setIsFavorite(false)
-   }
+    setIsLiked(!isLiked) //toggle the like button
+    // if user likes set add to favorite true
+    if(!isLiked){
+      setAddToFavorite(true) //adds to favorite
+      setFavoriteMessageDisplay(true) //display favorite message "added to favorites"
+      favoriteTimeout = setTimeout(() => {
+        setFavoriteMessageDisplay(false) //remove display message after 2 seconds
+      }, 2000);
+    }else{
+      clearTimeout(favoriteTimeout)
+      setAddToFavorite(false)
+    }
+  
   }
 
   const handleAddToFavorites = async () => {
     handleToggle()
     try {
-        const response = await axios.post("http://localhost:8000/api/foodrecipe/addtofavorites", {
+      // if the user unlikes delete from database
+      if(!addToFavorite){
+         // if user likes add to database
+         const response = await axios.post("http://localhost:8000/api/foodrecipe/addtofavorites", {
           title: foodData[0].title,
           recipe: foodData[0].recipe,
           instruction: foodData[0].instruction,
           image: foodData[0].image
         })
+        console.log(`foodData: ${foodData}`)
         console.log(response.data)
         if(response.status === 201){
-          setIsFavorite(true)
           console.log("Added to favorites")
         }
+       
+      } else{
+          console.log("food Data:",foodData)
+          const response = await axios.delete(`http://localhost:8000/api/foodrecipe/removefromfavorites/${foodData[0].title}`)
+          console.log(response.data)
+          if(response.status === 201){
+             console.log("removed from favorites")
+          }
       }
+   }  
     catch (error) {
       console.log(error)
     }
@@ -60,7 +74,7 @@ const ContentSection = ({foodData, handleRegenerate}) => {
                         <div className="bg-black absolute bottom-0 right-0 left-0 h-[33px] w-[390px] border rounded-bl-2xl rounded-br-2xl shadow-2xl flex items-center justify-center md:w-[484px] md:h-[47px]">
                              <p className="font-semibold text-xs text-white">{food.title}</p>
                         </div>
-                        {isFavorite && <>
+                        {favoriteMessageDisplay && <>
                           <div id="favorites" className="absolute top-20 mx-auto p-3 rounded-2xl  z-10 bg-black opacity-80 w-60 flex items-center justify-center left-0 right-0">
                             <div className="text-green-500">Added to favorites</div>
                           </div>
