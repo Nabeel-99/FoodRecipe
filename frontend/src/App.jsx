@@ -43,24 +43,15 @@ function App() {
       <Routes>
         <Route path="/" element={<HeroSection lightMode={lightMode}/>}/>
         <Route path="/" element={<ContentSection lightMode={lightMode} />} />
-        <Route path="/signup" element={<>
-          <div>
-            <div className="absolute inset-0 bg-black opacity-50 "></div>
-            <SignUp />
-          </div>
-        </>}/>
-        <Route path="/signin" element={<>
-          <div>
-            <div className="absolute inset-0 bg-black opacity-50"></div>
-            <SignIn />
-        </div>
-        </>}/>
+        <Route path="/signup" element={ <SignUp />}/>
+        <Route path="/signin" element={<SignIn />}/>
         <Route path="/favorites" element={<Favorites/>}/>
-        <Route path="/details" element={<Details/>} />
+        <Route path="/details/:id" element={<Details/>} />
       </Routes>
+      <Footer lightMode={lightMode}/>
       </div>
     </Router>
-    <Footer lightMode={lightMode}/>
+   
     </>
   )
 }

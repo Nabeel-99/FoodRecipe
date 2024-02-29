@@ -3,6 +3,7 @@ import * as dotenv from "dotenv"
 import cors from "cors"
 import mongoose from "mongoose"
 import recipeRoutes from "./routes/recipeRoutes.js"
+import userRoutes from "./routes/userRoutes.js"
 
 dotenv.config()
 
@@ -14,6 +15,8 @@ app.use(express.json())
 
 // routes
 app.use("/api/foodrecipe", recipeRoutes)
+app.use("/api/users", userRoutes)
+
 
 // database connection
 mongoose.connect(process.env.MONGO_URI).then(() => {
