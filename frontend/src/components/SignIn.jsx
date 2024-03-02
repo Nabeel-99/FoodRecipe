@@ -22,7 +22,9 @@ const SignIn = () => {
       password: formData.password
     })
     console.log(response.data)
-    localStorage.setItem("token", response.data)
+    localStorage.setItem("token", response.data.token) //user token
+    localStorage.setItem("userId", response.data.user._id) //userId
+    localStorage.setItem("username", response.data.user.firstName) //store user firstName for rendering on page after login
     window.location = "/"
   } catch (error) {
       if(error.response && error.response.status >= 400 && error.response.status < 500){

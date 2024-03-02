@@ -5,6 +5,7 @@ import mongoose from "mongoose"
 import recipeRoutes from "./routes/recipeRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
 
+
 dotenv.config()
 
 const app = express()

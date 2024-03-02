@@ -40,6 +40,7 @@ function App() {
     <Router>
     <div className="flex flex-col gap-5 h-full w-screen">
       <Navbar lightMode={lightMode} toggleMode={toggleMode} signIn={signIn}  toggleSignIn={toggleSignIn} />
+     
       <Routes>
         <Route path="/" element={<HeroSection lightMode={lightMode}/>}/>
         <Route path="/" element={<ContentSection lightMode={lightMode} />} />

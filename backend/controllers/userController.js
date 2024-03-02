@@ -49,7 +49,7 @@ export const authenticateUser = async (req, res) => {
         }
         // create token for user
         const token = user.generateAuthToken();
-        return res.status(200).json({token: token, message: "Logged in successfully"})
+        return res.status(200).json({user: user, token: token, message: "Logged in successfully"})
     } catch (error) {
         return res.status(500).json({message: "Internal Server Error"})
     }
@@ -62,28 +62,4 @@ const validateUser = (data) => {
         password: Joi.string().required().label("Password")
     })
     return schema.validate(data)
-}
-
-// get current user
-export const getCurrentUser = async (req, res) => {
-    try {
-        // retrieve user id based on the authentication middleware
-        const userId = req.user.id
-
-        const user = await User.findById(userId)
-        if(!user){
-            return res.status(404).json({message: "User not found"})
-        }
-        //remove sensitive info of user(password..etc)
-        return res.status(200).json({
-            user: {
-                _id : user._id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email
-            }
-        })
-    } catch (error) {
-        return res.status(500).json({message: "Internal Server Error"})
-    }
 }
