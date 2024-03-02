@@ -1,66 +1,82 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import burger from "../assets/burger.png"
 import { faHeart} from "@fortawesome/free-regular-svg-icons"
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as FillHeart } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
+import { removeFromFavorites } from "../../../backend/controllers/recipeController"
 
 const ContentSection = ({foodData, handleRegenerate}) => {
   const spinnerSectionRef = React.useRef(null); 
-  const [addToFavorite, setAddToFavorite] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
   const [favoriteMessageDisplay, setFavoriteMessageDisplay] = useState(false)
+  const [loginMessageDisplay, setLoginMessageDisplay] = useState(false)
+  const userLoggedIn = localStorage.getItem('token')
 
-  let favoriteTimeout;
   const handleToggle = () => {
+
+    if(!userLoggedIn){
+      // display message to login before adding to favorite
+      setLoginMessageDisplay(true)
+      setTimeout(() => {
+        setLoginMessageDisplay(false)
+      }, 2000);
+      return;
+    }
+
     setIsLiked(!isLiked) //toggle the like button
     // if user likes set add to favorite true
     if(!isLiked){
-      setAddToFavorite(true) //adds to favorite
-      setFavoriteMessageDisplay(true) //display favorite message "added to favorites"
-      favoriteTimeout = setTimeout(() => {
-        setFavoriteMessageDisplay(false) //remove display message after 2 seconds
-      }, 2000);
+      addToFavorites()
     }else{
-      clearTimeout(favoriteTimeout)
-      setAddToFavorite(false)
+      removeFromFavorites()
     }
   
   }
-
-  const handleAddToFavorites = async () => {
-    handleToggle()
+ 
+   // if user likes add to database
+  const addToFavorites = async () => {  
     try {
-      // if the user unlikes delete from database
-      if(!addToFavorite){
-         // if user likes add to database
+
          const response = await axios.post("http://localhost:8000/api/foodrecipe/addtofavorites", {
           title: foodData[0].title,
           recipe: foodData[0].recipe,
           instruction: foodData[0].instruction,
-          image: foodData[0].image
+          image: foodData[0].image,
+        
         })
         console.log(`foodData: ${foodData}`)
         console.log(response.data)
         if(response.status === 201){
+          setFavoriteMessageDisplay(true)
+          setTimeout(() => {
+            setFavoriteMessageDisplay(false)
+          }, 2000);
           console.log("Added to favorites")
-        }
-       
-      } else{
-          console.log("food Data:",foodData)
-          const response = await axios.delete(`http://localhost:8000/api/foodrecipe/removefromfavorites/${foodData[0].title}`)
-          console.log(response.data)
-          if(response.status === 201){
-             console.log("removed from favorites")
-          }
-      }
-   }  
+        }    
+      }  
     catch (error) {
-      console.log(error)
+      console.log(`Error adding to favorites: ${error}`)
     }
   }
 
+    // if the user unlikes delete from database
+  const removeFromFavorites = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/api/foodrecipe/removefromfavorites/${foodData[0].title}`)
+      console.log(response.data)
+      if(response.status === 201){
+         console.log("removed from favorites")
+      }
+    } catch (error) {
+      console.log(`Error removing from favoirtes: ${error}`)
+    }
+  }
+
+  useEffect(() => {
+    setIsLiked(false)
+  }, [foodData])
   
   return (
     <>
@@ -69,7 +85,7 @@ const ContentSection = ({foodData, handleRegenerate}) => {
                  <div className="flex flex-col gap-8 justify-center items-center">
                     <div><h2 className="text-2xl md:text-[48px] md:mt-8">Want to try this?</h2></div>
                     <div className="relative h-[300px]  shadow-2xl rounded-bl-2xl rounded-br-2xl md:w-[484px] md:h-[418px]">
-                         <div className="absolute right-0 px-4 py-2 bg-red-50 rounded-full"><button onClick={handleAddToFavorites}><FontAwesomeIcon icon={isLiked ? FillHeart: faHeart} className="w-6 h-6" style={{color: 'red'}}/></button></div>
+                         <div className="absolute right-0 px-4 py-2 bg-red-50 rounded-full"><button onClick={handleToggle}><FontAwesomeIcon icon={isLiked ? FillHeart: faHeart} className="w-6 h-6" style={{color: 'red'}}/></button></div>
                          <img src={food.image} className=" object-cover w-[390px] h-[268px] border-r-2 border-l-2 border-t-2 border-white bg-black rounded-tl-md rounded-tr-md md:w-[484px] md:h-[370px]" alt="food Image"/>
                         <div className="bg-black absolute bottom-0 right-0 left-0 h-[33px] w-[390px] border rounded-bl-2xl rounded-br-2xl shadow-2xl flex items-center justify-center md:w-[484px] md:h-[47px]">
                              <p className="font-semibold text-xs text-white">{food.title}</p>
@@ -77,6 +93,11 @@ const ContentSection = ({foodData, handleRegenerate}) => {
                         {favoriteMessageDisplay && <>
                           <div id="favorites" className="absolute top-20 mx-auto p-3 rounded-2xl  z-10 bg-black opacity-80 w-60 flex items-center justify-center left-0 right-0">
                             <div className="text-green-500">Added to favorites</div>
+                          </div>
+                        </>}
+                        {loginMessageDisplay && <>
+                          <div id="favorites" className="absolute top-20 mx-auto p-3 rounded-2xl  z-10 bg-black opacity-80 w-60 flex items-center justify-center left-0 right-0">
+                            <div className="text-green-500">Please Login to add item to favorites</div>
                           </div>
                         </>}
                     </div>

@@ -15,6 +15,10 @@ const recipeSchema = mongoose.Schema({
     image: {
         type: String,
         required: true
+    },
+    userLikedItems: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
     }
 })
 

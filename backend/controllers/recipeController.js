@@ -5,7 +5,13 @@ import recipeModel from "../model/recipeModel.js"
 export const addToFavorites =  async (req, res) => {
     const {title, image, recipe, instruction} = req.body
     try {
-        const favorites = await recipeModel.create({title,image,recipe,instruction})
+        const favorites = await recipeModel.create({
+            title,
+            image,
+            recipe,
+            instruction,
+            
+        })
         return res.status(201).json(favorites);
     } catch (error) {
         console.log(error)
