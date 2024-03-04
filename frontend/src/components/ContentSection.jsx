@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import burger from "../assets/burger.png"
 import { faHeart} from "@fortawesome/free-regular-svg-icons"
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons"
 import { faHeart as FillHeart } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
-import { removeFromFavorites } from "../../../backend/controllers/recipeController"
+
 
 const ContentSection = ({foodData, handleRegenerate}) => {
   const spinnerSectionRef = React.useRef(null); 
   const [isLiked, setIsLiked] = useState(false)
   const [favoriteMessageDisplay, setFavoriteMessageDisplay] = useState(false)
   const [loginMessageDisplay, setLoginMessageDisplay] = useState(false)
-  const userLoggedIn = localStorage.getItem('token')
+  const userLoggedIn = sessionStorage.getItem('token')
 
-  const handleToggle = () => {
+  const handleToggle = async() => {
 
     if(!userLoggedIn){
       // display message to login before adding to favorite
@@ -28,9 +27,9 @@ const ContentSection = ({foodData, handleRegenerate}) => {
     setIsLiked(!isLiked) //toggle the like button
     // if user likes set add to favorite true
     if(!isLiked){
-      addToFavorites()
+      await addToFavorites()
     }else{
-      removeFromFavorites()
+      await removeFromFavorites()
     }
   
   }
@@ -38,13 +37,20 @@ const ContentSection = ({foodData, handleRegenerate}) => {
    // if user likes add to database
   const addToFavorites = async () => {  
     try {
+         const token = sessionStorage.getItem('token')
 
          const response = await axios.post("http://localhost:8000/api/foodrecipe/addtofavorites", {
+          // using foodData[0] because it is an array of objects and we only want to access
+          // the first item 
           title: foodData[0].title,
           recipe: foodData[0].recipe,
           instruction: foodData[0].instruction,
           image: foodData[0].image,
         
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}` //token authorization
+          }
         })
         console.log(`foodData: ${foodData}`)
         console.log(response.data)
@@ -64,7 +70,12 @@ const ContentSection = ({foodData, handleRegenerate}) => {
     // if the user unlikes delete from database
   const removeFromFavorites = async () => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/foodrecipe/removefromfavorites/${foodData[0].title}`)
+      const token = sessionStorage.getItem('token')
+      const response = await axios.delete(`http://localhost:8000/api/foodrecipe/removefromfavorites/${foodData[0].title}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       console.log(response.data)
       if(response.status === 201){
          console.log("removed from favorites")

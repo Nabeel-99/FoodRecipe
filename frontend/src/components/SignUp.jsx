@@ -13,9 +13,10 @@ const SignUp = () => {
      firstName: '',
      lastName: '',
      password: '',
-  })
-  const [error, setError] = useState("")
+  }) //form data
+  const [error, setError] = useState("") //display error message
 
+//  handle sign up func
   const handleSignUpSubmit = async(e) => {
     e.preventDefault()
     try {
@@ -27,7 +28,7 @@ const SignUp = () => {
         })
         console.log(response.data);
         console.log(response.message)
-        navigate("/signin")
+        navigate("/signin") //navigate to sign in page
     } catch (error) {
         if(error.response && error.response.status >= 400 && error.response.status < 500){
             setError(error.response.data.message)
@@ -65,16 +66,7 @@ const SignUp = () => {
                 <p>Already have an account?</p>
                 <Link to="/signin" className="font-bold  border text-blue-500">Login</Link>
             </div>
-            {/* <div className="absolute z-10 inset-0 h-20 w-64 mx-auto bg-black opacity-50 top-80 left-0 right-0 text-white flex items-center justify-center">
-            <button className="flex items-center  gap-2">
-                <svg className="animate-spin h-5 w-5">
-                    <FontAwesomeIcon icon={faSpinner}/>
-                </svg>
-                Signing up...
-            </button>
-        </div>  */}
         </form>
-          
     </div>
     </>
   )

@@ -3,14 +3,22 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
 
 const Details = () => {
-    const [details, setDetails] = useState(
-        {title: "", recipe: [], image: '', instruction: []}
-    )
-    const {id} = useParams()
+    const [details, setDetails] = useState({
+        title: "", 
+        recipe: [], 
+        image: '', 
+        instruction: []
+    })
+    const {id} = useParams() //get th id parameter from url
     // fetch recipe details 
     const fetchRecipeDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/foodrecipe/getrecipe/${id}`)
+            const token = sessionStorage.getItem('token')
+            const response = await axios.get(`http://localhost:8000/api/foodrecipe/getrecipe/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
             console.log(response.data)
             setDetails({
                 title: response.data.title,
@@ -26,7 +34,7 @@ const Details = () => {
         fetchRecipeDetails()
     }, [])
     return (
-        <>
+            <>
                 <div>
                      <div className="flex flex-col gap-8 justify-center items-center">
                         <div><h2 className="text-2xl md:text-[48px] md:mt-8">Saved Recipes</h2></div>
@@ -66,8 +74,7 @@ const Details = () => {
                       
                      </div>
                 </div>   
-       
-        </>
+          </>
         
       )
 }

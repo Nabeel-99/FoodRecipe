@@ -4,18 +4,20 @@ import recipeModel from "../model/recipeModel.js"
 // add to favorites tab
 export const addToFavorites =  async (req, res) => {
     const {title, image, recipe, instruction} = req.body
+    const userId = req.userId // to identify which user added the recipe
     try {
         const favorites = await recipeModel.create({
             title,
             image,
             recipe,
             instruction,
+            user: userId
             
         })
         return res.status(201).json(favorites);
     } catch (error) {
         console.log(error)
-        return res.status(400).json({error})
+        return res.status(400).json({error, user: userId})
         
     }
 }
@@ -31,13 +33,14 @@ export const removeFromFavorites = async (req, res) => {
     }
 }
 // get recipes
-export const getRecipes = async (req, res) => {
+export const getUserRecipes = async (req, res) => {
+    const userId = req.userId
     try {
-        const recipes = await recipeModel.find({})
-        if(recipes != null)
-            return res.status(201).json(recipes)
-        return res.status(201).json("no recipes added yet")
-
+        const userRecipes = await recipeModel.find({user: userId})
+        if(userRecipes.length  === 0){
+            return res.status(204).json({message: 'No recipes added yet'})
+        }
+        return res.status(200).json(userRecipes)
     } catch (error) {
         return res.status(400).json({error: error})
     }
@@ -47,8 +50,8 @@ export const getRecipes = async (req, res) => {
 export const deleteRecipe = async (req, res) => {
     const { id } = req.params
     try {
-        const deletedWorkout = await recipeModel.findByIdAndDelete({_id: id})
-        return res.status(201).json(deletedWorkout)
+        const deletedRecipe = await recipeModel.findByIdAndDelete({_id: id})
+        return res.status(201).json(deletedRecipe)
     } catch (error) {
         return res.status(400).json({error: "Failed to delete recipe"})
     }

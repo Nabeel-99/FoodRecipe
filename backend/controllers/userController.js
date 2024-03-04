@@ -1,8 +1,8 @@
 import Joi from "joi";
 import userModel from "../model/userModel.js";
 import bcrypt from "bcrypt"
-import { response } from "express";
-const {validate, User} = userModel
+import jwt from "jsonwebtoken"
+const {validate, User} = userModel // destructure validate and User from userModel file
 // create user
 export const createUser = async (req, res) => {
     try {
@@ -28,12 +28,13 @@ export const createUser = async (req, res) => {
     }
 }
 
-// export authenticate user
-export const authenticateUser = async (req, res) => {
+// login user 
+export const loginUser = async (req, res) => {
     try {
         // check if user exists so we can authenticate
         const {email} = req.body
         const user = await User.findOne({email: email})
+        console.log(user)
         if(!user){
             return res.status(409).json({message: "Invalid Email or Password"})
         }
@@ -48,10 +49,11 @@ export const authenticateUser = async (req, res) => {
             return res.status(409).json({message: "Invalid Email or Password"})
         }
         // create token for user
-        const token = user.generateAuthToken();
-        return res.status(200).json({user: user, token: token, message: "Logged in successfully"})
+        const token = jwt.sign({userId: user._id}, process.env.JWT_PRIVATE_KEY, {expiresIn: '1d'})
+        return res.status(200).json({token: token, message: "Logged in successfully"})
     } catch (error) {
-        return res.status(500).json({message: "Internal Server Error"})
+        res.status(500).json({message: "Internal Server Error"})
+        console.log(error)
     }
 }
 
@@ -63,3 +65,20 @@ const validateUser = (data) => {
     })
     return schema.validate(data)
 }
+
+// verify token
+export const verifyToken = async (req, res, next) => {
+     const token = req.header('Authorization')
+     if(!token){
+       return res.status(401).json({message: 'Access denied, no  token provided.'}) 
+     }
+     try {
+        const verifiedToken = jwt.verify(token.split(' ')[1], process.env.JWT_PRIVATE_KEY)
+        req.userId = verifiedToken.userId;
+        next()
+     } catch (error) {
+       return  res.status(403).json({message: 'Invalid Token, please log in again.'})
+     }
+}
+
+

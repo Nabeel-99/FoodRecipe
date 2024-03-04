@@ -7,13 +7,13 @@ import axios from "axios"
 
 const SignIn = () => {
 
-  // const navigate = useNavigate()
   const [formData, setFormData] = useState({
      email: '',
      password: ''
   })
-  const [error, setError] = useState("")
+  const [error, setError] = useState("")//display error message
 
+  // handle Login func
  const handleLoginSubmit = async(e) => {
   e.preventDefault()
   try {
@@ -22,9 +22,13 @@ const SignIn = () => {
       password: formData.password
     })
     console.log(response.data)
-    localStorage.setItem("token", response.data.token) //user token
-    localStorage.setItem("userId", response.data.user._id) //userId
-    localStorage.setItem("username", response.data.user.firstName) //store user firstName for rendering on page after login
+    const token = response.data.token
+
+    // set token in header requests
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    sessionStorage.setItem("token", token) //user token
+    sessionStorage.setItem("username", response.data.user.firstName) //store user firstName for rendering on page after login
     window.location = "/"
   } catch (error) {
       if(error.response && error.response.status >= 400 && error.response.status < 500){
@@ -40,12 +44,24 @@ const SignIn = () => {
             <h2 className="text-3xl font-bold">Sign in</h2>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="email">Email Address</label>
-                 <input className=" px-3 p-1 rounded-sm border border-black" type="email" id="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required/>
+                 <input 
+                    className=" px-3 p-1 rounded-sm border border-black" 
+                    type="email" 
+                    id="email"
+                     value={formData.email} 
+                     onChange={(e) => setFormData({...formData, email: e.target.value})} 
+                     required/>
             </div>
            
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="password">Password</label>
-                 <input className=" px-3 p-1 rounded-sm border border-black" type="password" id="password" min={8} max={16} value={formData.password} onChange={(e) => setFormData({...formData, password:e.target.value})} required/>
+                 <input 
+                    className=" px-3 p-1 rounded-sm border border-black" 
+                    type="password" 
+                    id="password"  
+                    value={formData.password} 
+                    onChange={(e) => setFormData({...formData, password:e.target.value})} 
+                    required/>
             </div>
             {error && <div className="border bg-red-500 text-white">{error}</div>}
             <div className="flex items-center justify-center">

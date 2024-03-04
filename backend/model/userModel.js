@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import  Jwt  from "jsonwebtoken";
 import Joi from "joi";
 import passwordComplexity from "joi-password-complexity"
 
@@ -21,15 +20,10 @@ const userSchema = mongoose.Schema({
         required: true
     },
 })
-// generate token
-userSchema.methods.generateAuthToken = function(){
-    const token = Jwt.sign({_id: this._id}, process.env.JWT_PRIVATE_KEY, {
-        expiresIn: '1d'
-    })
-    return token
-}
 
-// validate user data
+
+
+// validate user data on sign up
 const validate = (data) => {
     const schema = Joi.object({
         email: Joi.string().required().email().label("Email"),

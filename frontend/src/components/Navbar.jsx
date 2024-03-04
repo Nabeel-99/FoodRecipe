@@ -1,46 +1,45 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {Link, useLocation} from "react-router-dom"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import { faGithub} from '@fortawesome/free-brands-svg-icons'
-import {faBars, faMoon, faMagnifyingGlass, faUtensils, faXmark, faCircle, faChevronDown} from '@fortawesome/free-solid-svg-icons'
+import React, { useState } from 'react'
+import { Link } from "react-router-dom"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {faGithub} from "@fortawesome/free-brands-svg-icons"
+import {faBars, faMoon,  faUtensils, faXmark, faCircle, faChevronDown} from '@fortawesome/free-solid-svg-icons'
 import logo from "../assets/logo.png"
 import logoWhite from '../assets/logow.png'
-import sun from "../assets/Sun.png"
-import axios from "axios"
+
 
 const Navbar = ({lightMode, toggleMode}) => {
-  const [user, setUser] = useState('')
-  const [burgerMenu, setBurgerMenu] = useState(false)
-  const burgerMenuRef = useRef(null)
 
- 
+  const [burgerMenu, setBurgerMenu] = useState(false) 
+  const [dropdown, setDropdown] = useState(false)
+  const userLoggedIn = sessionStorage.getItem("token") //get token
+  const userName = sessionStorage.getItem('username') //get user's FirstName
+
+//  display burger menu
   const displayBurgerMenu = () => {
     setBurgerMenu(!burgerMenu)
   }
- const userLoggedIn = localStorage.getItem("token")
- const userName = localStorage.getItem('username')
 
+// close burger menu on links navigation
  const linkTo = () => {
   setBurgerMenu(false)
  }
- const [dropdown, setDropdown] = useState(false)
+// menu dropdown
  const showDropDown = () => {
   setDropdown(!dropdown)
  }
-
+// remove dropdown
  const removeDropdrown = () => {
   setDropdown(false)
  }
+//  handle logout
  const handleLogout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem('username')
-  localStorage.removeItem('userId')
-  window.location.reload()
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem('username')
+  sessionStorage.removeItem('userId')
+  window.location = '/' //navigate back to default page after logout
   setBurgerMenu(false)
  }
  
-//  fetch user data 
-
 
   return (
     <div className="flex justify-between items-start w-screen py-6 px-2 md:px-12">
@@ -52,8 +51,8 @@ const Navbar = ({lightMode, toggleMode}) => {
           <FontAwesomeIcon icon={burgerMenu ? faXmark : faBars} className="w-6 h-7  mt-3 px-3 md:hidden "/>
         </button>
        </div>
-        {/* burger menu */}
-        <div ref={burgerMenuRef} className={burgerMenu ? "z-10 absolute top-20 right-5 bg-white text-black h-96 w-72 rounded-md shadow-sm md:hidden" : "hidden"}>
+        {/* burger menu dropdown*/}
+        <div className={burgerMenu ? "z-10 absolute top-20 right-5 bg-white text-black h-96 w-72 rounded-md shadow-sm md:hidden" : "hidden"}>
           <div className="flex flex-col gap-4"> 
             <div className="flex items-center  border-b-2 p-2">
               <FontAwesomeIcon icon={faUtensils} className="px-2"/>
@@ -98,6 +97,7 @@ const Navbar = ({lightMode, toggleMode}) => {
             
           </div>
         </div>
+        {/* menu */}
        <div className="hidden md:flex items-center gap-10">
         <div>
           {userLoggedIn ? (<>
