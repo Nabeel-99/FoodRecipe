@@ -14,16 +14,16 @@ function App() {
 
   const [signIn, setSignIn] = useState(false) //signin button
   const [lightMode, setLightMode] = useState(() => { 
-    const savedTheme = JSON.parse(localStorage.getItem('theme'));
+    const savedTheme = JSON.parse(sessionStorage.getItem('theme'));
     return savedTheme ? savedTheme.lightMode : false
   }) //handle Darkmode
   const toggleMode = () => {
     setLightMode(!lightMode)
     
   }
-  //getting theme from localstorage
+  //getting theme from sessionStorage
   useEffect(() => {
-    localStorage.setItem('theme', JSON.stringify({lightMode: lightMode}))
+    sessionStorage.setItem('theme', JSON.stringify({lightMode: lightMode}))
     document.body.style.backgroundColor = lightMode ? '#EDEDF0' : '#0D1734'
     document.body.style.color = lightMode ? 'black' : 'white'
     document.body.style.transition =  '.5s ease all'

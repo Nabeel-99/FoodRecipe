@@ -16,10 +16,13 @@ const recipeSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    userLikedItems: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user',
+        required: true
+       
     }
+ 
 })
 
 const Recipe = mongoose.model("recipe", recipeSchema)
