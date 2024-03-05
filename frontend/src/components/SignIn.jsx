@@ -1,12 +1,13 @@
 import  { useState } from 'react'
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate} from "react-router-dom"
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
 
 
-const SignIn = () => {
 
+const SignIn = () => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
      email: '',
      password: ''
@@ -21,15 +22,15 @@ const SignIn = () => {
       email: formData.email,
       password: formData.password
     })
-    console.log(response.data)
+    console.log(response.status)
     const token = response.data.token
 
     // set token in header requests
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
+    sessionStorage.setItem('userId', response.data.user._id)
     sessionStorage.setItem("token", token) //user token
     sessionStorage.setItem("username", response.data.user.firstName) //store user firstName for rendering on page after login
-    window.location = "/"
+    window.location = '/'
   } catch (error) {
       if(error.response && error.response.status >= 400 && error.response.status < 500){
         setError(error.response.data.message)
@@ -68,7 +69,7 @@ const SignIn = () => {
                 <button className="bg-green-500 text-white w-36 p-2 rounded-md border hover:border-blue-300">Login</button>
             </div>
             <div className="flex items-center justify-center">
-                <p>Don't have an account?</p>
+                <p> Don't have an account?</p>
                 <Link to="/signup" className="font-bold  border text-blue-500">Sign up</Link>
         </div>
         </form>

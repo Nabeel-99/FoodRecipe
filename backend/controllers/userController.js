@@ -34,7 +34,6 @@ export const loginUser = async (req, res) => {
         // check if user exists so we can authenticate
         const {email} = req.body
         const user = await User.findOne({email: email})
-        console.log(user)
         if(!user){
             return res.status(409).json({message: "Invalid Email or Password"})
         }
@@ -50,7 +49,7 @@ export const loginUser = async (req, res) => {
         }
         // create token for user
         const token = jwt.sign({userId: user._id}, process.env.JWT_PRIVATE_KEY, {expiresIn: '1d'})
-        return res.status(200).json({token: token, message: "Logged in successfully"})
+        return res.status(200).json({token: token, message: "Logged in successfully", user: user})
     } catch (error) {
         res.status(500).json({message: "Internal Server Error"})
         console.log(error)
