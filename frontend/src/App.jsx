@@ -9,6 +9,10 @@ import SignIn from "./components/SignIn.jsx"
 import SignUp from "./components/SignUp.jsx"
 import Favorites from "./components/Favorites.jsx"
 import Details from "./components/Details.jsx"
+import RecipePosts from "./components/RecipePosts.jsx"
+import RecipeForm from "./components/RecipeForm.jsx"
+import UserRecipes from "./components/UserRecipes.jsx"
+import ExploreRecipes from "./components/ExploreRecipes.jsx"
 
 function App() {
 
@@ -45,6 +49,10 @@ function App() {
         <Route path="/" element={<ContentSection lightMode={lightMode} />} />
         <Route path="/signup" element={ <SignUp />}/>
         <Route path="/signin" element={<SignIn />}/>
+        <Route path="/explore" element={<ExploreRecipes />}/>
+        <Route path="/myrecipes" element={<UserRecipes />}/>
+        <Route path="/recipes" element={<RecipePosts />}/>
+        <Route path="/recipeform" element={<RecipeForm />}/>
         <Route path="/favorites" element={<Favorites/>}/>
         <Route path="/details/:id" element={<Details/>} />
       </Routes>

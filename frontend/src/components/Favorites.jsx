@@ -21,7 +21,7 @@ const Favorites = () => {
   const fetchFavorites = async () => {
     try {
       const token = sessionStorage.getItem('token')
-      const response = await axios.get(`http://localhost:8000/api/foodrecipe/getuserrecipes`, {
+      const response = await axios.get(`http://localhost:8000/api/foodrecipe/getuserfavorites`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -75,7 +75,7 @@ const Favorites = () => {
   const handleRemove = async (id) => {
     try {
       const token = sessionStorage.getItem('token');
-      const response = await axios.delete(`http://localhost:8000/api/foodrecipe/deleterecipe/${id}`, {
+      const response = await axios.delete(`http://localhost:8000/api/foodrecipe/deletefromfavorites/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
