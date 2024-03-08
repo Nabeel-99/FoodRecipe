@@ -98,16 +98,18 @@ const Navbar = ({lightMode, toggleMode}) => {
         <div>
           {userLoggedIn ? (<>
             <button 
-            className={lightMode ? "p-1 w-36 rounded-md bg-gray-300 text-black border border-black" : "p-1 w-36 rounded-md bg-transparent border border-white" } 
+            className={lightMode ? "p-1 w-44 rounded-md bg-gray-300 text-black border border-black" : " bg-[#1E293B] p-1 w-44 rounded-md bg-transparent border border-gray-50" } 
             onClick={showDropDown}>{userName} <FontAwesomeIcon icon={faChevronDown}/></button> 
-            <div className={dropdown ? "absolute z-10 top-16 right-30 bg-gray-300 text-black h-48 w-36 rounded-md border border-black": "hidden"}>
-          <div className="flex flex-col gap-3 p-3">
-         
-          <Link to="/" onClick={removeDropdrown}><button className="border border-gray-500 rounded-md w-28 text-black text-sm hover:border-gray-100">Home</button></Link>
-            <Link to="/favorites" onClick={removeDropdrown}><button className="border border-gray-500 rounded-md w-28 text-black text-sm hover:border-gray-100">Favorites</button></Link>
-            <button className="border border-gray-500 rounded-md  bg-red-500 text-white text-sm hover:border-red-100" onClick={handleLogout} >Logout</button>
-            <button className="border border-gray-500 rounded-md p-1 bg-red-500 text-white text-sm hover:border-red-100">Delete Account</button>
-          </div> 
+            <div className={dropdown ? "absolute z-10 top-16 right-30  text-black  w-44 rounded-md border border-gray-50": "hidden"}>
+              <div className={"flex flex-col items-center justify-center  text-left  rounded-md " + (lightMode ? 'bg-gray-300 text-black' : 'bg-[#1E293B] text-white')}>
+                <Link to="/" onClick={linkTo} className="   border-b-gray-50   border-b w-full px-5 py-2  hover:bg-slate-400 hover:rounded-tl-md hover:rounded-tr-md ">Home</Link>
+                <Link to="/recipes" onClick={linkTo} className="  border-b-gray-50   border-b  w-full px-5 py-2  hover:bg-slate-400 ">Explore recipes</Link>
+                <Link to="/recipeform" onClick={linkTo} className="   border-b-gray-50   border-b w-full px-5  py-2 hover:bg-slate-400 ">Post recipes</Link>
+                <Link to="/myrecipes" onClick={linkTo} className="   border-b-gray-50   border-b  w-full px-5  py-2 hover:bg-slate-400 ">My recipes</Link>
+                <Link to="/favorites" onClick={linkTo} className="  border-b-gray-50   border-b  w-full px-5 py-2  hover:bg-slate-400 ">Favorites</Link>
+                <button className=" border-b-gray-50   border-b w-full px-5 text-left  text-red-500 py-2 hover:bg-red-200">Delete Account</button>
+                <button className=" w-full px-5  text-red-500 text-left  py-2 hover:bg-red-200 hover:rounded-bl-md hover:rounded-br-md" onClick={handleLogout}>Log out</button>
+              </div> 
           </div>
           </>) : (
               <Link to="/signin" ><button className={lightMode ? "p-1 w-32 rounded-md bg-transparent border border-black" : "p-1 w-32 rounded-md bg-transparent border border-white"}>Sign in</button></Link>

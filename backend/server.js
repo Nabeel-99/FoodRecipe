@@ -4,19 +4,20 @@ import cors from "cors"
 import mongoose from "mongoose"
 import recipeRoutes from "./routes/recipeRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
-import path from "path"
-
+import path, { dirname } from "path"
+import {fileURLToPath} from "url"
+ 
 
 dotenv.config()
-const __dirname = path.dirname(new URL(import.meta.url).pathname)
-const app = express()
 
+const app = express()
+// config
+const __filename = fileURLToPath(import.meta.url) // get the file name
+const __dirname = dirname(__filename) // get directory name
 // middlewares
 app.use(cors())
 app.use(express.json())
-app.use(express.static(path.join(__dirname, "public")))
-
-
+app.use("/Images", express.static(path.join(__dirname, "Images")))// make images accessible in browser
 
 // routes
 app.use("/api/foodrecipe", recipeRoutes)

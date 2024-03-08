@@ -6,16 +6,17 @@ const recipePostSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    recipes: {
+    recipes: [{
         type: String,
         required: true
-    },
-    recipeInstructions: {
+    }],
+    recipeInstructions: [{
         type: String,
         required: true
-    },
+    }],
     recipeImage: {
         type: String,
+        required: true
         
     },
     comments: {

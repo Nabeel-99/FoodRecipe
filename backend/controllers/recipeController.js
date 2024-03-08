@@ -84,10 +84,37 @@ export const postRecipe = async (req, res) => {
              comments,
              user: userId
         })
-        return res.status(201).json(newRecipe);
+        return res.status(201).json({newRecipe, imagePath: imagePath});
    } catch (error) {
         return res.status(400).status({error: error})
    }
+}
+
+// update with based on ID
+export const updateRecipePost = async (req, res) => {
+    try{
+        const {id} = req.params
+        const {title, recipes, recipeInstructions, comments} = req.body
+        // update image if provided
+        let imagePath = null
+        if(req.file){
+            imagePath =  req.file.path
+        }
+        const updatedData = {
+            title,
+            recipes,
+            recipeInstructions,
+            comments
+        }
+        if(imagePath){
+            updatedData.recipeImage = imagePath
+        }
+        const updatedRecipe = await recipePostModel.findByIdAndUpdate({_id: id}, updatedData, {new: true})
+        console.log(updatedRecipe)
+        return res.status(200).json(updatedRecipe);
+    }catch(error){
+        return res.status(400).json({error: error})
+    }   
 }
 
 // get user recipes
@@ -114,3 +141,15 @@ export const deleteRecipe = async (req, res) => {
         return res.status(400).json({error: error})
     }
 }
+
+// get user recipe details
+export const getRecipeDetails = async (req, res) => {
+    try {
+        const {id} = req.params
+        const foundRecipe = await recipePostModel.findById({_id: id})
+        return res.status(200).json(foundRecipe)
+    } catch (error) {
+        return res.status(400).json({error: error})
+    }
+}
+
