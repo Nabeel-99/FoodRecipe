@@ -1,5 +1,5 @@
 import express from "express"
-import { addToFavorites, deleteFromFavorites, deleteRecipe, getRecipeById, getUserFavorites, getUserRecipes, postRecipe, removeFromFavorites } from "../controllers/recipeController.js"
+import { addToFavorites, deleteFromFavorites, deleteRecipe, getRecipeById, getRecipeDetails, getUserFavorites, getUserRecipes, postRecipe, removeFromFavorites, updateRecipePost } from "../controllers/recipeController.js"
 import { verifyToken } from "../controllers/userController.js"
 import multer from "multer"
 
@@ -9,7 +9,7 @@ const router = express.Router()
 // multer config
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        return cb(null, './public/Images')
+        return cb(null, 'Images')
     },
     filename: function(req, file, cb){
         return cb(null, `${Date.now()}_${file.originalname}`)
@@ -29,7 +29,11 @@ router.delete("/deletefromfavorites/:id", verifyToken, deleteFromFavorites) // a
 
 // 
 router.get('/getuserrecipes', verifyToken, getUserRecipes); // Get user's recipe list
-router.post('/postrecipe', upload.single('recipeImage'), verifyToken, postRecipe)
-router.delete('/deleterecipe/:id', verifyToken, deleteRecipe)
+router.post('/postrecipe', upload.single('recipeImage'), verifyToken, postRecipe) //allow authentictes users to post recipe
+router.delete('/deleterecipe/:id', verifyToken, deleteRecipe)//delete recipe
+router.get('/getrecipedetails/:id', getRecipeDetails)//get the posted recipe details
+router.get('/fetchrecipe/:id', getRecipeDetails)//get recipe to be updated on form
+router.patch('/updaterecipe/:id', updateRecipePost) //update recipe Post
+
 
 export default router

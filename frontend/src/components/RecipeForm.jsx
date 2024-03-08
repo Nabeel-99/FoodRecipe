@@ -5,8 +5,8 @@ import { Link, useNavigate } from "react-router-dom"
 const RecipeForm = () => {
     const [recipeForm, setRecipeForm]= useState({
         title: '',
-        recipes: '',
-        recipeInstructions: '',
+        recipes: [],
+        recipeInstructions: [],
         recipeImage: null,
         comments: '',
     })
@@ -72,7 +72,7 @@ const RecipeForm = () => {
             </div>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="recipe-image">Upload Image:</label>
-                <input className=" px-3 p-1 rounded-sm border border-black" type="file" accept="image/*" id="recipe-image" onChange={(e) => setRecipeForm({...recipeForm, recipeImage:e.target.files[0]})} />
+                <input className=" px-3 p-1 rounded-sm border border-black" type="file" accept="image/*" id="recipe-image" onChange={(e) => setRecipeForm({...recipeForm, recipeImage:e.target.files[0]})} required/>
             </div>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="comments">Further comments:</label>
@@ -81,7 +81,7 @@ const RecipeForm = () => {
             {error && <div className="border bg-red-500 text-white"> {error} </div>}
             <div className="flex items-center justify-between">
                 <button type="submit" className="bg-green-500 text-white w-36 p-2 rounded-md border hover:border-blue-300">Post Recipe</button>
-                <Link to="/"><button type="submit" className="bg-red-500 text-white w-36 p-2 rounded-md border hover:border-blue-300">Cancel</button></Link>
+                <Link to="/myrecipes"><button type="submit" className="bg-red-500 text-white w-36 p-2 rounded-md border hover:border-blue-300">Cancel</button></Link>
             </div>
           
         </form> 

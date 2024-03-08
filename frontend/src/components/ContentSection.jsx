@@ -95,10 +95,10 @@ const ContentSection = ({foodData, handleRegenerate}) => {
             <div key={food.id} ref={spinnerSectionRef}>
                  <div className="flex flex-col gap-8 justify-center items-center">
                     <div><h2 className="text-2xl md:text-[48px] md:mt-8">Want to try this?</h2></div>
-                    <div className="relative h-[300px]  shadow-2xl rounded-bl-2xl rounded-br-2xl md:w-[484px] md:h-[418px]">
+                    <div className="relative  rounded-bl-2xl rounded-br-2xl md:w-[484px] md:h-[418px]">
                          <div className="absolute right-0 px-4 py-2 bg-red-50 rounded-full"><button onClick={handleToggle}><FontAwesomeIcon icon={isLiked ? FillHeart: faHeart} className="w-6 h-6" style={{color: 'red'}}/></button></div>
                          <img src={food.image} className=" object-cover w-[390px] h-[268px] border-r-2 border-l-2 border-t-2 border-white bg-black rounded-tl-md rounded-tr-md md:w-[484px] md:h-[370px]" alt="food Image"/>
-                        <div className="bg-black absolute bottom-0 right-0 left-0 h-[33px] w-[390px] border rounded-bl-2xl rounded-br-2xl shadow-2xl flex items-center justify-center md:w-[484px] md:h-[47px]">
+                        <div className="border bg-black h-9 rounded-bl-2xl rounded-br-2xl shadow-md flex items-center justify-center">
                              <p className="font-semibold text-xs text-white">{food.title}</p>
                         </div>
                         {favoriteMessageDisplay && <>
@@ -112,13 +112,13 @@ const ContentSection = ({foodData, handleRegenerate}) => {
                           </div>
                         </>}
                     </div>
-                  <div className="md:flex gap-60 mt-8">
-                   <div className="relative rounded-tl-xl">
-                     <div className={"absolute h-[40px] w-[390px]  bg-black top-0 right-0 left-0 rounded-tl-xl rounded-tr-xl flex items-center justify-center" }>
+                  <div className="flex flex-col gap-5 md:flex md:flex-row md:gap-20  mt-8">
+                   <div className="relative ">
+                   <div className="border bg-black w-[390px] h-9 rounded-tl-2xl rounded-tr-2xl shadow-md flex items-center justify-center">
                          <h4 className="text-white">Recipes</h4>
                      </div>
-                     <div className="bg-white h-[321px] w-[390px] mt-10 overflow-auto rounded-tl-xl rounded-tr-xl md:h-[478px] md:mt-0">
-                         <ul className="list-disc leading-loose text-left text-black px-10 mt-14">
+                     <div className="bg-white h-[321px] w-[390px] overflow-auto md:h-[478px] md:mt-0">
+                         <ul className="list-disc leading-loose text-left text-black px-10 py-2 mt-1">
                              {food.recipe.map((recipeItem, index) => (
                                 <li key={index}>{recipeItem.aisle}</li>
                              ))}
@@ -126,11 +126,11 @@ const ContentSection = ({foodData, handleRegenerate}) => {
                      </div>
                    </div>
                    <div className="relative  md:w-[680px] md:mt-8">
-                     <div className="absolute h-[40px] w-[390px] top-0 right-0 left-0 bg-black rounded-tl-xl rounded-tr-xl flex items-center justify-center md:w-[680px]" >
+                   <div className="border bg-black h-9 rounded-tl-2xl rounded-tr-2xl shadow-md flex items-center justify-center">
                          <h4 className="text-white">Instructions</h4>
                      </div>
-                     <div className="bg-white h-[321px] w-[390px] mt-10 overflow-y-scroll rounded-tl-xl rounded-tr-xl md:w-[680px] md:h-[478px] md:mt-0">
-                         <ul className="list-disc leading-loose text-left text-black px-10 mt-14">
+                     <div className="bg-white h-[321px] w-[390px] overflow-y-scroll md:w-[680px] md:h-[478px] md:mt-0">
+                         <ul className="list-disc leading-loose text-left text-black px-10 py-2 mt-1">
                             {food.instruction.map((instructionItem, index) => (
                                 <li key={index}>{instructionItem.instruction}</li>
                             ))}

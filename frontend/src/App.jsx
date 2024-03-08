@@ -13,6 +13,8 @@ import RecipePosts from "./components/RecipePosts.jsx"
 import RecipeForm from "./components/RecipeForm.jsx"
 import UserRecipes from "./components/UserRecipes.jsx"
 import ExploreRecipes from "./components/ExploreRecipes.jsx"
+import RecipeDetails from "./components/RecipeDetails.jsx"
+import UpdateRecipeForm from "./components/UpdateRecipeForm.jsx"
 
 function App() {
 
@@ -51,6 +53,8 @@ function App() {
         <Route path="/signin" element={<SignIn />}/>
         <Route path="/explore" element={<ExploreRecipes />}/>
         <Route path="/myrecipes" element={<UserRecipes />}/>
+        <Route path="/myrecipedetails/:id" element={<RecipeDetails />}/>
+        <Route path="/updaterecipe/:id" element={<UpdateRecipeForm />}/>
         <Route path="/recipes" element={<RecipePosts />}/>
         <Route path="/recipeform" element={<RecipeForm />}/>
         <Route path="/favorites" element={<Favorites/>}/>
