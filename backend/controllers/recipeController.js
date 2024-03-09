@@ -5,9 +5,9 @@ import recipePostModel from "../model/recipePostModel.js"
 
 // add to favorites tab
 export const addToFavorites =  async (req, res) => {
-    const {title, image, recipe, instruction} = req.body
-    const userId = req.userId // to identify which user added the recipe
     try {
+        const {title, image, recipe, instruction} = req.body
+        const userId = req.userId // to identify which user added the recipe
         const favorites = await recipeModel.create({
             title,
             image,
@@ -26,8 +26,8 @@ export const addToFavorites =  async (req, res) => {
 
 // remove from favorites
 export const removeFromFavorites = async (req, res) => {
-    const { title } = req.params
     try {
+        const { title } = req.params
         const removedRecipe = await recipeModel.findOneAndDelete({title: title})
         return res.status(201).json(removedRecipe)
     } catch (error) {
@@ -36,8 +36,8 @@ export const removeFromFavorites = async (req, res) => {
 }
 // get user favorites
 export const getUserFavorites = async (req, res) => {
-    const userId = req.userId
     try {
+        const userId = req.userId
         const userRecipes = await recipeModel.find({user: userId})
         if(userRecipes.length  === 0){
             return res.status(204).json({message: 'No recipes added yet'})
@@ -50,8 +50,8 @@ export const getUserFavorites = async (req, res) => {
 
 // delete from favorites
 export const deleteFromFavorites = async (req, res) => {
-    const { id } = req.params
     try {
+        const { id } = req.params
         const deletedRecipe = await recipeModel.findByIdAndDelete({_id: id})
         return res.status(201).json(deletedRecipe)
     } catch (error) {
@@ -61,8 +61,8 @@ export const deleteFromFavorites = async (req, res) => {
 
 // get recipe by id
 export const getRecipeById = async(req, res) => {
-    const { id } = req.params;
     try {
+        const { id } = req.params;
         const foundRecipe = await recipeModel.findById({_id : id})
         return res.status(201).json(foundRecipe);
     } catch (error) {
@@ -72,10 +72,10 @@ export const getRecipeById = async(req, res) => {
 
 // post recipe by user
 export const postRecipe = async (req, res) => {
-   const {title, recipes, recipeInstructions, comments} = req.body
-   const userId = req.userId
-   const imagePath = req.file ? req.file.path : null
    try {
+    const {title, recipes, recipeInstructions, comments} = req.body
+    const userId = req.userId
+    const imagePath = req.file ? req.file.path : null
         const newRecipe = await recipePostModel.create({
              title,
              recipes,
@@ -110,7 +110,6 @@ export const updateRecipePost = async (req, res) => {
             updatedData.recipeImage = imagePath
         }
         const updatedRecipe = await recipePostModel.findByIdAndUpdate({_id: id}, updatedData, {new: true})
-        console.log(updatedRecipe)
         return res.status(200).json(updatedRecipe);
     }catch(error){
         return res.status(400).json({error: error})
@@ -121,7 +120,7 @@ export const updateRecipePost = async (req, res) => {
 export const getUserRecipes = async (req, res) => {
     try {
        const userId = req.userId
-       const foundUserRecipe = await recipePostModel.find({user: userId})
+       const foundUserRecipe = await recipePostModel.find({user: userId}).populate('user', 'firstName lastName')
        if(foundUserRecipe.length === 0){
             return res.status(204).json({message: 'No any posted recipes yet.'})
        }
@@ -133,8 +132,8 @@ export const getUserRecipes = async (req, res) => {
 
 // delete user recipe
 export const deleteRecipe = async (req, res) => {
-    const {id} = req.params
     try {
+        const {id} = req.params
         const deletePost = await recipePostModel.findByIdAndDelete({_id: id})
         return res.status(200).json(deletePost)
     } catch (error) {
@@ -146,10 +145,48 @@ export const deleteRecipe = async (req, res) => {
 export const getRecipeDetails = async (req, res) => {
     try {
         const {id} = req.params
-        const foundRecipe = await recipePostModel.findById({_id: id})
-        return res.status(200).json(foundRecipe)
+        const foundUserRecipe = await recipePostModel.findById({_id: id})
+        console.log(foundUserRecipe)
+        return res.status(200).json(foundUserRecipe)
     } catch (error) {
         return res.status(400).json({error: error})
     }
 }
 
+// fetch recipes for form update
+export const fetchRecipesToUpdate = async (req, res) => {
+    try {
+        const {id} = req.params
+        const foundRecipeToUpdate = await recipePostModel.findById({_id: id})
+        console.log(foundRecipeToUpdate)
+        return res.status(200).json(foundRecipeToUpdate)
+    } catch (error) {
+        return res.status(400).json({error: error})
+    }
+}
+
+// get all recipes for users to explore
+export const getAllRecipes = async (req, res) => {
+    try {
+        const allRecipes = await recipePostModel.find({}).populate('user', 'firstName lastName')
+
+        if(!allRecipes)
+            return res.status(201).json({message: 'No recipes to explore'})
+        return res.status(200).json(allRecipes)
+    } catch (error) {
+        return res.statu(400).json({error: error})
+    }
+}
+
+// get recipes of User
+export const getRecipesOfUser = async (req, res) => {
+    try {
+        const userId = req.userId
+        const userRecipes = await recipePostModel.findById({user: userId})
+        console.log(userRecipes)
+        return res.status(200).json(userRecipes)
+    } catch (error) { 
+        console.log(error)
+        return res.status(400).json({error: error})
+    }
+}

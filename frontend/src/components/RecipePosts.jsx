@@ -1,10 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
-import burger from "../assets/burger.png"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
+import { faMagnifyingGlass, faCircle } from "@fortawesome/free-solid-svg-icons"
+import axios from "axios"
 
 const RecipePosts = () => {
+  const [allRecipes, setAllRecipes] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [displayMessage, setDisplayMessage] = useState('')
+  // filter search
+  const filteredRecipes = Array.isArray(allRecipes) ? allRecipes.filter((recipe) => {
+    return recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+  }) : []
+
+  const fetchAllRecipes = async () => {
+    try {
+      const token = sessionStorage.getItem('token')
+      const response = await axios.get("http://localhost:8000/api/foodrecipe/getallrecipes", {
+        headers: {Authorization: `Bearer ${token}`}
+      })
+      console.log(response.data)
+      if(response.status === 201){
+        setDisplayMessage(response.data.message)
+      }
+      setAllRecipes(response.data)
+    } catch (error) {
+      console.log('Error')
+    }
+  }
+
+  useEffect(() => {
+    fetchAllRecipes()
+  }, [])
   return (
     <>
     <div className="text-3xl">Explore Recipes</div>
@@ -23,19 +51,28 @@ const RecipePosts = () => {
           <option value="dateAdded">Date added</option>
         </select>
     </div>
-    <div className="flex flex-col items-center gap-8 justify-center md:grid md:grid-cols-4 md:m-10">
-        <div className="flex flex-col items-center rounded-md bg-gray-300 justify-center shadow-lg  border">
-            <img src={burger} alt="image" className="object-cover w-80 h-64"/>
-            <div className="flex flex-col gap-2 w-full p-2 bg-white items-center rounded-bl-md rounded-br-md">
-            <h3 className="mt-2 text-black">Title</h3>
-             <Link><button className="p-1 bg-orange-400 w-36 rounded-md hover:bg-orange-300 ">View Recipe</button></Link>
-            <div>
-              <Link to="" className="text-black">User profile</Link>
-            </div>
-            </div>
-        </div>
-    </div>
-      
+    <div className="flex flex-col items-center gap-8 justify-center md:grid md:grid-cols-4 md:place-items-center md:jus md:mx-auto md:m-10" >
+    {filteredRecipes.length > 0 ? filteredRecipes.map(recipe => (
+
+       <div className="flex flex-col items-center rounded-md bg-gray-300 justify-center w-96 shadow-lg md:w-auto  border" key={recipe._id}>
+           <img src={`http://localhost:8000/${recipe.recipeImage}`} alt="image" className="object-contain w-80 h-64"/>
+           <div className="flex flex-col gap-2 w-full p-2 bg-white items-center rounded-bl-md rounded-br-md">
+           <h3 className="mt-2 text-black">{recipe.title}</h3>
+            <Link to={`/myrecipedetails/${recipe._id}`}><button className="p-1 bg-orange-400 w-36 rounded-md hover:bg-orange-300 ">View Recipe</button></Link>
+           <div className="">
+             <Link to={`/user/${recipe.user._id}`} className="text-black flex items-center gap-2 underline hover:text-blue-500">
+                <FontAwesomeIcon icon={faCircle} className="w-9 h-9 text-gray-300"/> {recipe.user.firstName} {recipe.user.lastName}
+            </Link>
+           </div>
+           </div>
+       </div>
+  
+    )) :(<>
+         {displayMessage && <div>{displayMessage}</div>}
+        </>
+        )
+    }
+     </div>
     </>
   )
 }

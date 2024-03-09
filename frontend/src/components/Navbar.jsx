@@ -53,40 +53,40 @@ const Navbar = ({lightMode, toggleMode}) => {
         </button>
        </div>
         {/* burger menu dropdown*/}
-        <div className={burgerMenu ? "z-20 absolute top-20 border right-5 bg-white text-black h-[27rem] w-72 rounded-md shadow-md md:hidden" : "hidden"}>
-          <div className="flex flex-col gap-4"> 
+        <div className={burgerMenu ? "z-20 absolute top-20  right-5  text-black  w-72  shadow-md md:hidden" : "hidden"}>
+          <div className={"flex flex-col gap-4 rounded-md border  " + (lightMode ? 'bg-gray-300 border-black ' : 'bg-[#1E293B] text-white')}> 
             <div className="flex items-center  border-b-2 p-2">
               <FontAwesomeIcon icon={faUtensils} className="px-2"/>
               <p>MealMate</p>
             </div>
             {userLoggedIn ? (<>
-              <div className="text-left flex flex-col gap-3">
+              <div className="text-left flex flex-col gap-3 ">
               <div className="flex items-center px-5 gap-1">
                 <FontAwesomeIcon icon={faCircle} className="w-7 h-8"/>
                 <p className="text-xl">{userName}</p>
               </div>
-              <div className="flex flex-col gap-3 items-center justify-center text-center">
-                <Link to="/" onClick={linkTo} className="px-9 text-xl border border-black w-60 rounded-md ">Home</Link>
-                <Link to="/recipes" onClick={linkTo} className="px-9 text-xl border border-black w-60 rounded-md ">Explore recipes</Link>
-                <Link to="/recipeform" onClick={linkTo} className="px-9 text-xl border border-black w-60 rounded-md ">Post recipes</Link>
-                <Link to="/myrecipes" onClick={linkTo} className="px-9 text-xl border border-black w-60 rounded-md ">My recipes</Link>
-                <Link to="/favorites" onClick={linkTo} className="px-9 text-xl border border-black w-60 rounded-md ">Favorites</Link>
-                <button className=" border-2 text-white bg-red-500 w-60 p-1 rounded-md">Delete Account</button>
-                <button className=" border-2 text-white bg-red-500 w-60 p-1 rounded-md" onClick={handleLogout}>Log out</button>
+              <div className={"flex flex-col items-center justify-center  text-left  rounded-md " + (lightMode ? 'bg-gray-300 text-black' : 'bg-[#1E293B] text-white')}>
+                <Link to="/" onClick={linkTo} className="   border-b-gray-50   border-b border-t w-full px-5 py-3  hover:bg-slate-400  ">Home</Link>
+                <Link to="/recipes" onClick={linkTo} className="  border-b-gray-50   border-b  w-full px-5 py-3  hover:bg-slate-400 ">Explore recipes</Link>
+                <Link to="/recipeform" onClick={linkTo} className="   border-b-gray-50   border-b w-full px-5  py-3 hover:bg-slate-400 ">Post recipes</Link>
+                <Link to="/myrecipes" onClick={linkTo} className="   border-b-gray-50   border-b  w-full px-5  py-3 hover:bg-slate-400 ">My recipes</Link>
+                <Link to="/favorites" onClick={linkTo} className="  border-b-gray-50   border-b  w-full px-5 py-3  hover:bg-slate-400 ">Favorites</Link>
+                <button className=" border-b-gray-50   border-b w-full px-5 text-left  text-red-500 py-3 hover:bg-red-200">Delete Account</button>
+                <button className=" w-full px-5  text-red-500 text-left  py-3 hover:bg-red-200 " onClick={handleLogout}>Log out</button>
               </div>
             </div>
           
             </>) : (
               <>
-              <div className="text-left flex flex-col gap-3">
+              <div className="text-left flex flex-col gap-3 p-1 py-2">
               <p className="text-2xl  px-4">Ready to get started?{}</p>
-              <p className="text-md text px-4 text-gray-500">Sign in to save your favorite recipes.</p>
+              <p className="text-md text px-4 text-gray-300">Sign in to save your favorite recipes.</p>
             </div>
             <div>
-              <Link to="/signin" onClick={linkTo} ><button className="bg-transparent border-2 border-black w-64 p-1 rounded-md">Sign in</button></Link>
+              <Link to="/signin" onClick={linkTo} ><button className="bg-transparent border  w-64 p-1 rounded-md hover:bg-gray-500">Sign in</button></Link>
             </div>
             <div>
-              <FontAwesomeIcon icon={faGithub} className="w-7 h-7"/>
+              <Link><FontAwesomeIcon icon={faGithub} className="w-7 h-7 mb-2"/></Link>
             </div> 
               </>
             )}
@@ -98,15 +98,15 @@ const Navbar = ({lightMode, toggleMode}) => {
         <div>
           {userLoggedIn ? (<>
             <button 
-            className={lightMode ? "p-1 w-44 rounded-md bg-gray-300 text-black border border-black" : " bg-[#1E293B] p-1 w-44 rounded-md bg-transparent border border-gray-50" } 
+            className={lightMode ? "p-1 w-44 rounded-md bg-gray-300 text-black border border-black" : " bg-[#233147] p-1 w-44 rounded-md bg-transparent border border-gray-50" } 
             onClick={showDropDown}>{userName} <FontAwesomeIcon icon={faChevronDown}/></button> 
             <div className={dropdown ? "absolute z-10 top-16 right-30  text-black  w-44 rounded-md border border-gray-50": "hidden"}>
               <div className={"flex flex-col items-center justify-center  text-left  rounded-md " + (lightMode ? 'bg-gray-300 text-black' : 'bg-[#1E293B] text-white')}>
-                <Link to="/" onClick={linkTo} className="   border-b-gray-50   border-b w-full px-5 py-2  hover:bg-slate-400 hover:rounded-tl-md hover:rounded-tr-md ">Home</Link>
-                <Link to="/recipes" onClick={linkTo} className="  border-b-gray-50   border-b  w-full px-5 py-2  hover:bg-slate-400 ">Explore recipes</Link>
-                <Link to="/recipeform" onClick={linkTo} className="   border-b-gray-50   border-b w-full px-5  py-2 hover:bg-slate-400 ">Post recipes</Link>
-                <Link to="/myrecipes" onClick={linkTo} className="   border-b-gray-50   border-b  w-full px-5  py-2 hover:bg-slate-400 ">My recipes</Link>
-                <Link to="/favorites" onClick={linkTo} className="  border-b-gray-50   border-b  w-full px-5 py-2  hover:bg-slate-400 ">Favorites</Link>
+                <Link to="/" onClick={removeDropdrown} className="   border-b-gray-50   border-b w-full px-5 py-2  hover:bg-slate-400 hover:rounded-tl-md hover:rounded-tr-md ">Home</Link>
+                <Link to="/recipes" onClick={removeDropdrown} className="  border-b-gray-50   border-b  w-full px-5 py-2  hover:bg-slate-400 ">Explore recipes</Link>
+                <Link to="/recipeform" onClick={removeDropdrown} className="   border-b-gray-50   border-b w-full px-5  py-2 hover:bg-slate-400 ">Post recipes</Link>
+                <Link to="/myrecipes" onClick={removeDropdrown} className="   border-b-gray-50   border-b  w-full px-5  py-2 hover:bg-slate-400 ">My recipes</Link>
+                <Link to="/favorites" onClick={removeDropdrown} className="  border-b-gray-50   border-b  w-full px-5 py-2  hover:bg-slate-400 ">Favorites</Link>
                 <button className=" border-b-gray-50   border-b w-full px-5 text-left  text-red-500 py-2 hover:bg-red-200">Delete Account</button>
                 <button className=" w-full px-5  text-red-500 text-left  py-2 hover:bg-red-200 hover:rounded-bl-md hover:rounded-br-md" onClick={handleLogout}>Log out</button>
               </div> 

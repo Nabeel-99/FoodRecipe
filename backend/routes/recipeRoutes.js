@@ -1,5 +1,5 @@
 import express from "express"
-import { addToFavorites, deleteFromFavorites, deleteRecipe, getRecipeById, getRecipeDetails, getUserFavorites, getUserRecipes, postRecipe, removeFromFavorites, updateRecipePost } from "../controllers/recipeController.js"
+import { addToFavorites, deleteFromFavorites, deleteRecipe, fetchRecipesToUpdate, getAllRecipes, getRecipeById, getRecipeDetails, getRecipesOfUser, getUserFavorites, getUserRecipes, postRecipe, removeFromFavorites, updateRecipePost } from "../controllers/recipeController.js"
 import { verifyToken } from "../controllers/userController.js"
 import multer from "multer"
 
@@ -27,13 +27,15 @@ router.delete("/deletefromfavorites/:id", verifyToken, deleteFromFavorites) // a
 
 
 
-// 
+// user actions
 router.get('/getuserrecipes', verifyToken, getUserRecipes); // Get user's recipe list
 router.post('/postrecipe', upload.single('recipeImage'), verifyToken, postRecipe) //allow authentictes users to post recipe
 router.delete('/deleterecipe/:id', verifyToken, deleteRecipe)//delete recipe
-router.get('/getrecipedetails/:id', getRecipeDetails)//get the posted recipe details
-router.get('/fetchrecipe/:id', getRecipeDetails)//get recipe to be updated on form
-router.patch('/updaterecipe/:id', updateRecipePost) //update recipe Post
+router.get('/getrecipedetails/:id', verifyToken, getRecipeDetails)//get the posted recipe details
+router.get('/fetchrecipe/:id', verifyToken, fetchRecipesToUpdate)//get recipe to be updated on form
+router.patch('/updaterecipe/:id', verifyToken, updateRecipePost) //update recipe Post
+router.get('/getallrecipes', verifyToken, getAllRecipes) //get all recipes for users to explore
+router.get('/getrecipesofuser/:id', verifyToken, getRecipesOfUser)
 
 
 export default router

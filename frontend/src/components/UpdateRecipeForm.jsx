@@ -14,10 +14,14 @@ const UpdateRecipeForm = () => {
     const [error, setError] = useState('')
     const {id} = useParams()
     const [imagePreview, setImagePreview] = useState(null)
+
     // fetch recipe to edit
     const fetchRecipeDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/foodrecipe/fetchrecipe/${id}`)
+            const token = sessionStorage.getItem('token')
+            const response = await axios.get(`http://localhost:8000/api/foodrecipe/fetchrecipe/${id}`, {
+                headers: {Authorization: `Bearer ${token}`}
+            })
             setRecipeForm({
                 title: response.data.title,
                 recipes: response.data.recipes,
@@ -30,31 +34,42 @@ const UpdateRecipeForm = () => {
             console.log(error)
         }
     }
+
     const handleUpdateRecipe = async (e) => {
         e.preventDefault()
         try {
             // get user Id from storage
-            const userId = sessionStorage.getItem('userId')
+            const token = sessionStorage.getItem('token')
 
             const formData = new FormData()
             formData.append( 'title', recipeForm.title )
             formData.append('recipes', recipeForm.recipes)
             formData.append('recipeInstructions', recipeForm.recipeInstructions)
-            formData.append('recipeImage',  recipeForm.recipeImage)
             formData.append('comments', recipeForm.comments)
-            formData.append('userId', userId)
 
-            const token = sessionStorage.getItem('token')
-            const response = await axios.patch(`http://localhost:8000/api/foodrecipe/updaterecipe/${id}`, formData, {
+            if(recipeForm.recipeImage){
+                formData.append('recipeImage', recipeForm.recipeImage)
+            }
+      
+             const response = await axios.patch(`http://localhost:8000/api/foodrecipe/updaterecipe/${id}`, formData, {
                headers: {
                   Authorization: `Bearer ${token}`,
                  "Content-Type": "multipart/form-data",
          
                }
             })
-            
-            navigate('/myrecipes')
+            setRecipeForm({
+                title: recipeForm.title,
+                recipes: recipeForm.recipes,
+                recipeInstructions: recipeForm.recipeInstructions,
+                recipeImage: recipeForm.recipeImage,
+                comments: recipeForm.comments
+            })
             console.log(response.data)
+            console.log(response)
+            console.log(recipeForm, "recipe form")
+            navigate('/myrecipes')
+           
         } catch (error) {
             if(error.response && error.response.status >= 400 && error.response.status < 500){
                 setError(error.response.data.message)
@@ -71,7 +86,7 @@ const UpdateRecipeForm = () => {
   return (
     <div className="flex flex-col items-center p-3 md:p-0">
        <h2 className="text-3xl font-bold">Post recipes for other users to explore</h2>
-       <form action="POST" className="bg-white text-black text-left flex flex-col gap-5 p-5 rounded-md w-full mt-6   md:w-[50rem] md:mt-5" onSubmit={handleUpdateRecipe} >
+       <form  className="bg-white text-black text-left flex flex-col gap-5 p-5 rounded-md w-full mt-6   md:w-[50rem] md:mt-5" onSubmit={handleUpdateRecipe} >
             <h2 className="text-3xl font-bold">Add a new recipe</h2>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="recipe-title">Title: <span className="text-red-500 font-bold">*</span></label>
