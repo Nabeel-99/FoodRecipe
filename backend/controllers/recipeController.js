@@ -181,8 +181,8 @@ export const getAllRecipes = async (req, res) => {
 // get recipes of User
 export const getRecipesOfUser = async (req, res) => {
     try {
-        const userId = req.userId
-        const userRecipes = await recipePostModel.findById({user: userId})
+        const userId = req.params.id
+        const userRecipes = await recipePostModel.find({user: userId})
         console.log(userRecipes)
         return res.status(200).json(userRecipes)
     } catch (error) { 
