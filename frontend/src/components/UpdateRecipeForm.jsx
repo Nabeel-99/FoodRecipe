@@ -36,47 +36,51 @@ const UpdateRecipeForm = () => {
     }
 
     const handleUpdateRecipe = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         try {
-            // get user Id from storage
-            const token = sessionStorage.getItem('token')
-
-            const formData = new FormData()
-            formData.append( 'title', recipeForm.title )
-            formData.append('recipes', recipeForm.recipes)
-            formData.append('recipeInstructions', recipeForm.recipeInstructions)
-            formData.append('comments', recipeForm.comments)
-
-            if(recipeForm.recipeImage){
-                formData.append('recipeImage', recipeForm.recipeImage)
+            const token = sessionStorage.getItem('token');
+            const formData = new FormData();
+            formData.append('title', recipeForm.title);
+            formData.append('recipes', recipeForm.recipes);
+            formData.append('recipeInstructions', recipeForm.recipeInstructions);
+            formData.append('comments', recipeForm.comments);
+    
+            if (recipeForm.recipeImage) {
+                formData.append('recipeImage', recipeForm.recipeImage);
             }
-      
-             const response = await axios.patch(`http://localhost:8000/api/foodrecipe/updaterecipe/${id}`, formData, {
-               headers: {
-                  Authorization: `Bearer ${token}`,
-                 "Content-Type": "multipart/form-data",
-         
-               }
-            })
-            setRecipeForm({
-                title: recipeForm.title,
-                recipes: recipeForm.recipes,
-                recipeInstructions: recipeForm.recipeInstructions,
-                recipeImage: recipeForm.recipeImage,
-                comments: recipeForm.comments
-            })
-            console.log(response.data)
-            console.log(response)
-            console.log(recipeForm, "recipe form")
-            navigate('/myrecipes')
-           
+    
+            const response = await axios.patch(`http://localhost:8000/api/foodrecipe/updaterecipe/${id}`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                }
+            });
+    
+            if (response.status === 200) {
+                // Assuming the response.data contains the updated recipe
+                const updatedRecipe = response.data;
+                // Update the state with the updated recipe
+                setRecipeForm({
+                    title: updatedRecipe.title,
+                    recipes: updatedRecipe.recipes,
+                    recipeInstructions: updatedRecipe.recipeInstructions,
+                    recipeImage: updatedRecipe.recipeImage,
+                    comments: updatedRecipe.comments
+                });
+                // Redirect to the user's recipe page
+                navigate('/myrecipes');
+            } else {
+                // Handle other status codes if necessary
+                console.log("Unexpected response status:", response.status);
+            }
         } catch (error) {
-            if(error.response && error.response.status >= 400 && error.response.status < 500){
-                setError(error.response.data.message)
+            if (error.response && error.response.status >= 400 && error.response.status < 500) {
+                setError(error.response.data.message);
             }
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
+    
 
     useEffect(() => {
         fetchRecipeDetails()
