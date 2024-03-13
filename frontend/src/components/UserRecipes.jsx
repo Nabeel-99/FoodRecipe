@@ -11,7 +11,7 @@ const UserRecipes = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [inputValue, setInputValue] = useState('')
     const [recipes, setRecipes] = useState([])
-    const [username, setusername] = useState('')
+    const [username, setUsername] = useState('')
 
     const filteredRecipes = Array.isArray(recipes) ? recipes.filter((recipe) => {
         return recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -32,6 +32,9 @@ const UserRecipes = () => {
             console.log(response.data)
             console.log(response.data)
             setRecipes(response.data)
+            const {firstName, lastName} = response.data.user
+            setUsername(`${firstName} ${lastName}`)
+            
         } catch (error) {
             console.log(error)
         }
@@ -63,8 +66,9 @@ const UserRecipes = () => {
     }, [])
   return (
        <>
-    <div>Nabeel's recipes</div>
-    <div className="flex items-center gap-2 justify-center mx-auto md:gap-5 ">
+    {filteredRecipes.length > 0 ? filteredRecipes.map((recipe) => (
+      <>
+      <div className="flex items-center gap-2 justify-center mx-auto md:gap-5 " key={recipe._id}>
       <div className="bg-white p-1 py-2 rounded-md border border-black text-left text-black">
       <label htmlFor="search-recipe"><FontAwesomeIcon icon={faMagnifyingGlass} className="px-2"/></label>
       <input type="text" placeholder="Search saved recipe..." id="search-recipe" className="px-1 w-64 outline-none md:w-96 b"
@@ -79,11 +83,9 @@ const UserRecipes = () => {
           <option value="descending">Z-A</option>
           <option value="dateAdded">Date added</option>
         </select>
-    </div>
-    <div className="flex flex-col items-center justify-center h-full">
+      </div>
+      <div className="flex flex-col items-center justify-center h-full">
       <div className="flex flex-col p-3 items-center justify-center md:grid md:grid-cols-3 gap-10">
-       {filteredRecipes.length > 0 ? filteredRecipes.map((recipe) => 
-            (
              <div className="flex flex-col shadow-2xl rounded-br-xl rounded-bl-xl bg-gray-200" key={recipe._id} >
                  <img src={`http://localhost:8000/${recipe.recipeImage}`} className="object-contain w-[390px] h-[268px] border-r-2 border-l-2 border-t-2 border-white rounded-tl-md rounded-tr-md bg-gray-300 " alt="food image"/>
                  <div className="p-1 ">
@@ -96,14 +98,15 @@ const UserRecipes = () => {
                 <Link to={`/myrecipedetails/${recipe._id}`}><button className="bg-orange-500 w-60 p-1 rounded-md mx-auto text-white" >View Details</button></Link>
                </div>
               </div>
-
-        )) : 
-            <div className="flex flex-col">
-              <h3>Nabeel hasn't posted any recipes yet.</h3>
-           </div>
-       }
      </div>
-   </div>
+      </div>
+      </>
+    )) : (
+       <div className="flex flex-col">
+          <h3> hasnt posted any recipes yet.</h3>
+      </div>
+    )}
+  
     </>
   )
 }
