@@ -35,7 +35,7 @@ router.get('/getrecipedetails/:id', verifyToken, getRecipeDetails)//get the post
 router.get('/fetchrecipe/:id', verifyToken, fetchRecipesToUpdate)//get recipe to be updated on form
 router.patch('/updaterecipe/:id', verifyToken, updateRecipePost) //update recipe Post
 router.get('/getallrecipes', verifyToken, getAllRecipes) //get all recipes for users to explore
-router.get('/getrecipesofuser/:id', verifyToken, getRecipesOfUser)
+router.get('/getrecipesofuser/:id', verifyToken, getRecipesOfUser) //get specific user recipes
 
 
 export default router

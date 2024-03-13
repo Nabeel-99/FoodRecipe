@@ -174,7 +174,7 @@ export const getAllRecipes = async (req, res) => {
             return res.status(201).json({message: 'No recipes to explore'})
         return res.status(200).json(allRecipes)
     } catch (error) {
-        return res.statu(400).json({error: error})
+        return res.status(400).json({error: error})
     }
 }
 
@@ -182,8 +182,7 @@ export const getAllRecipes = async (req, res) => {
 export const getRecipesOfUser = async (req, res) => {
     try {
         const userId = req.params.id
-        const userRecipes = await recipePostModel.find({user: userId})
-        console.log(userRecipes)
+        const userRecipes = await recipePostModel.find({user: userId}).populate('user', 'firstName lastName')
         return res.status(200).json(userRecipes)
     } catch (error) { 
         console.log(error)

@@ -2,7 +2,7 @@
 import React from 'react'
 import { useEffect} from "react"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons"
 import axios from "axios"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -12,7 +12,9 @@ const UserProfile = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [inputValue, setInputValue] = useState('')
     const [recipes, setRecipes] = useState([])
-    const [userName, setUserName] = useState('')
+    const location = useLocation();
+    const updatedRecipe = location.state?.updatedRecipe;
+
 
     const filteredRecipes = Array.isArray(recipes) ? recipes.filter((recipe) => {
         return recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -31,8 +33,6 @@ const UserProfile = () => {
                 }
             })
             console.log(response.data)
-            setUserName(response.user)
-            console.log(response.data.user)
             setRecipes(response.data)
         } catch (error) {
             console.log(error)
@@ -79,6 +79,16 @@ const UserProfile = () => {
     useEffect(() => {
         fetchUserRecipes()
     }, [])
+    useEffect(() => {
+      if (updatedRecipe) {
+          setRecipes(prevRecipes => prevRecipes.map(recipe => {
+              if (recipe._id === updatedRecipe._id) {
+                  return updatedRecipe;
+              }
+              return recipe;
+          }));
+      }
+  }, [updatedRecipe]);
   return (
        <>
     <div className="text-4xl  tracking-tight"> My recipes</div>
@@ -117,7 +127,7 @@ const UserProfile = () => {
                 <Link to={`/updaterecipe/${recipe._id}`}><button className="bg-orange-500 w-60 p-1 rounded-md mx-auto text-white" >Edit Details</button></Link>
                </div>
                 <div className="py-1">
-                  <button className="bg-red-500 w-60 p-1 rounded-md mx-auto text-white" onClick={() => deleteRecipe(recipe._id)}>Delete recipe</button>
+                  <button className="bg-red-500 w-60 p-1 rounded-md mx-auto text-white cursor-pointer" onClick={() => deleteRecipe(recipe._id)}>Delete recipe</button>
                  </div>
               </div>
 

@@ -59,16 +59,8 @@ const UpdateRecipeForm = () => {
             if (response.status === 200) {
                 // Assuming the response.data contains the updated recipe
                 const updatedRecipe = response.data;
-                // Update the state with the updated recipe
-                setRecipeForm({
-                    title: updatedRecipe.title,
-                    recipes: updatedRecipe.recipes,
-                    recipeInstructions: updatedRecipe.recipeInstructions,
-                    recipeImage: updatedRecipe.recipeImage,
-                    comments: updatedRecipe.comments
-                });
-                // Redirect to the user's recipe page
-                navigate('/myrecipes');
+                // Pass the updated recipe back to UserProfile component
+                navigate('/myrecipes', { state: { updatedRecipe } });
             } else {
                 // Handle other status codes if necessary
                 console.log("Unexpected response status:", response.status);
