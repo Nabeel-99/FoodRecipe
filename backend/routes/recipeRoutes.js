@@ -33,7 +33,7 @@ router.post('/postrecipe', upload.single('recipeImage'), verifyToken, postRecipe
 router.delete('/deleterecipe/:id', verifyToken, deleteRecipe)//delete recipe
 router.get('/getrecipedetails/:id', verifyToken, getRecipeDetails)//get the posted recipe details
 router.get('/fetchrecipe/:id', verifyToken, fetchRecipesToUpdate)//get recipe to be updated on form
-router.patch('/updaterecipe/:id', verifyToken, updateRecipePost) //update recipe Post
+router.patch('/updaterecipe/:id', upload.single('recipeImage'), verifyToken, updateRecipePost) //update recipe Post
 router.get('/getallrecipes', verifyToken, getAllRecipes) //get all recipes for users to explore
 router.get('/getrecipesofuser/:id', verifyToken, getRecipesOfUser) //get specific user recipes
 
