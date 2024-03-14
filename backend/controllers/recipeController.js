@@ -110,6 +110,7 @@ export const updateRecipePost = async (req, res) => {
             updatedData.recipeImage = imagePath
         }
         const updatedRecipe = await recipePostModel.findByIdAndUpdate({_id: id}, updatedData, {new: true})
+        console.log(updatedRecipe)
         return res.status(200).json(updatedRecipe);
     }catch(error){
         return res.status(400).json({error: error})
@@ -168,11 +169,16 @@ export const fetchRecipesToUpdate = async (req, res) => {
 // get all recipes for users to explore
 export const getAllRecipes = async (req, res) => {
     try {
-        const allRecipes = await recipePostModel.find({}).populate('user', 'firstName lastName')
-
-        if(!allRecipes)
+        const {searchTerm} = req.query
+        let recipes;
+        if(searchTerm){
+            recipes = await recipePostModel.find({title: { $regex: new RegExp(searchTerm, 'i')}}).populate('user', 'firstName lastName')
+        }else{
+            recipes = await recipePostModel.find({}).populate('user', 'firstName lastName')
+        }
+        if(recipes.length === 0)
             return res.status(201).json({message: 'No recipes to explore'})
-        return res.status(200).json(allRecipes)
+        return res.status(200).json(recipes)
     } catch (error) {
         return res.status(400).json({error: error})
     }
