@@ -17,9 +17,35 @@ const UserRecipes = () => {
         return recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
     }) : []
 
-    const handleSort = () => {
-
+    const handleSort = (e) => {
+      const selectedValue = e.target.value
+      if (selectedValue === 'ascending'){
+        sortAscending()
+      } else if (selectedValue === 'descending'){
+        sortDescending()
+      }
+     setInputValue(selectedValue)
+  
     }
+    // ascending order
+    const sortAscending = () => {
+       // sort the items
+       const sortedRecipes = [...recipes]
+       sortedRecipes.sort((a,b) => {
+         return a.title.localeCompare(b.title)
+       })
+       setRecipes(sortedRecipes);
+    }
+  
+    // sort by descending order
+    const sortDescending = () => {
+      const sortedRecipes = [...recipes]
+      sortedRecipes.sort((a, b) => {
+        return b.title.localeCompare(a.title)
+      })
+      setRecipes(sortedRecipes)
+    }
+  
     const {id} = useParams()
     const fetchUserRecipes = async () => {
         try {
@@ -83,7 +109,6 @@ const UserRecipes = () => {
           <option value="" disabled hidden>Sort</option>
           <option value="ascending">A-Z</option>
           <option value="descending">Z-A</option>
-          <option value="dateAdded">Date added</option>
         </select>
       </div>
       <div className="flex flex-col items-center justify-center h-full">

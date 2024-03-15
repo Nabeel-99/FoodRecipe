@@ -86,8 +86,8 @@ const Navbar = ({lightMode, toggleMode}) => {
                 <Link to="/recipeform" onClick={linkTo} className="   border-b-gray-50   border-b w-full px-5  py-3 hover:bg-slate-400 ">Post recipes</Link>
                 <Link to="/myrecipes" onClick={linkTo} className="   border-b-gray-50   border-b  w-full px-5  py-3 hover:bg-slate-400 ">My recipes</Link>
                 <Link to="/favorites" onClick={linkTo} className="  border-b-gray-50   border-b  w-full px-5 py-3  hover:bg-slate-400 ">Favorites</Link>
-                <button className=" border-b-gray-50   border-b w-full px-5 text-left  text-red-500 py-3 hover:bg-red-200">Delete Account</button>
                 <button className=" w-full px-5  text-red-500 text-left  py-3 hover:bg-red-200 " onClick={handleLogout}>Log out</button>
+                <button className=" border-b-gray-50   border-t w-full px-5 text-left  text-red-500 py-3 hover:bg-red-200">Delete Account</button>
               </div>
             </div>
           
