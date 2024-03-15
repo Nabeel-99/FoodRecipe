@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faMagnifyingGlass, faCircle } from "@fortawesome/free-solid-svg-icons"
+import { faMagnifyingGlass, faCircle, faSpinner } from "@fortawesome/free-solid-svg-icons"
 import axios from "axios"
 
 const RecipePosts = () => {
   const [allRecipes, setAllRecipes] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [displayMessage, setDisplayMessage] = useState('')
+  const [spinner, setSpinner] = useState(false)
   // filter search
   
 
@@ -22,6 +23,7 @@ const RecipePosts = () => {
       if(response.status === 201){
         setDisplayMessage(response.data.message)
       }
+      setDisplayMessage('')
       setAllRecipes(response.data)
     } catch (error) {
       console.log('Error')
@@ -29,18 +31,33 @@ const RecipePosts = () => {
   }
 
   const handleSearch = async () => {
+    setSpinner(true)
     try {
       const token = sessionStorage.getItem('token');
       const response = await axios.get(`http://localhost:8000/api/foodrecipe/getallrecipes?searchTerm=${searchTerm}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      
       if (response.status === 200) {
-        setAllRecipes(response.data);
-      } else {
-        setDisplayMessage(response.data.message);
+        if(response.data.length === 0){
+          setAllRecipes([])
+          setDisplayMessage('No match found')
+        }else{
+          setTimeout(() => {
+            setDisplayMessage('')
+            setAllRecipes(response.data);
+          }, 3000);
+        }
+      }else{
+        setAllRecipes([])
+        setDisplayMessage(response.data.message)
       }
     } catch (error) {
       console.log('Error:', error);
+    }finally{
+        setTimeout(() => {
+          setSpinner(false)
+        }, 3000);
     }
   };
 
@@ -58,15 +75,22 @@ const RecipePosts = () => {
         value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
       />
       </div>
-        <button className="w-16 h-10 bg-white p-1 py-2 rounded-md text-black border border-black cursor-pointer md:w-36"
+        <button className="w-16 h-10 bg-white p-1 py-2 rounded-md text-black border border-black cursor-pointer md:w-36 hover:bg-blue-400 hover:text-white"
         onClick={handleSearch}
         >
           Search
         </button>
     </div>
+    <div className="flex justify-center items-center h-full">
+    {spinner && ( <button type="button" className="bg-indigo-500 flex justify-center items-center p-1 rounded-md" disabled>
+              <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+                <FontAwesomeIcon icon={faSpinner}/>
+              </svg>
+              Searching...
+          </button>)}
+    </div>
     <div className="flex flex-col items-center gap-8 justify-center md:grid md:grid-cols-4 md:place-items-center md:jus md:mx-auto md:m-10" >
     {allRecipes.length > 0 ? allRecipes.map(recipe => (
-
        <div className="flex flex-col items-center rounded-md bg-gray-300 justify-center w-96 shadow-lg md:w-auto  border" key={recipe._id}>
            <img src={`http://localhost:8000/${recipe.recipeImage}`} alt="image" className="object-contain w-80 h-64"/>
            <div className="flex flex-col gap-2 w-full p-2 bg-white items-center rounded-bl-md rounded-br-md">
