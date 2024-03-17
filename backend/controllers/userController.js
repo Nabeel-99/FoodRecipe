@@ -48,8 +48,16 @@ export const loginUser = async (req, res) => {
             return res.status(409).json({message: "Invalid Email or Password"})
         }
         // create token for user
-        const token = jwt.sign({userId: user._id}, process.env.JWT_PRIVATE_KEY, {expiresIn: '1d'})
-        return res.status(200).json({token: token, message: "Logged in successfully", user: user})
+        const token = jwt.sign({userId: user._id}, process.env.JWT_PRIVATE_KEY, {expiresIn: '1h'})
+       
+
+        //set token in cookies
+        res.cookie('token', token, {
+            httpOnly: true,
+            // secure: true,
+            // maxAge: 8640000
+        })
+        return res.status(200).json({token: token, message: "Logged in successfully", user: {firstName: user.firstName}})
     } catch (error) {
         res.status(500).json({message: "Internal Server Error"})
         console.log(error)
@@ -67,17 +75,29 @@ const validateUser = (data) => {
 
 // verify token
 export const verifyToken = async (req, res, next) => {
-     const token = req.header('Authorization')
+     const token = req.cookies.token
      if(!token){
        return res.status(401).json({message: 'Access denied, no  token provided.'}) 
      }
      try {
-        const verifiedToken = jwt.verify(token.split(' ')[1], process.env.JWT_PRIVATE_KEY)
+        const verifiedToken = jwt.verify(token, process.env.JWT_PRIVATE_KEY)
         req.userId = verifiedToken.userId;
         next()
      } catch (error) {
        return  res.status(403).json({message: 'Invalid Token, please log in again.'})
      }
 }
+
+// logout user
+export const logout = (req, res) => {
+    try {
+        res.clearCookie('token')
+        return res.status(200).json({message: "Logged out successfully"})
+    } catch (error) {
+        return res.status(400).json({error: `error logging out ${error}`})
+    }
+
+}
+
 
 

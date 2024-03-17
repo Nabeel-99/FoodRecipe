@@ -5,15 +5,15 @@ import {faGithub} from "@fortawesome/free-brands-svg-icons"
 import {faBars, faMoon,  faUtensils, faXmark, faCircle, faChevronDown, faL} from '@fortawesome/free-solid-svg-icons'
 import logo from "../assets/logo.png"
 import logoWhite from '../assets/logow.png'
+import axios from "axios"
 
 
 const Navbar = ({lightMode, toggleMode}) => {
 
   const [burgerMenu, setBurgerMenu] = useState(false) 
   const [dropdown, setDropdown] = useState(false)
-  const userLoggedIn = sessionStorage.getItem("token") //get token
-  const userName = sessionStorage.getItem('username') //get user's FirstName
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [firstName, setFirstName] = useState('')
 //  display burger menu
   const displayBurgerMenu = () => {
     setBurgerMenu(!burgerMenu)
@@ -32,15 +32,46 @@ const Navbar = ({lightMode, toggleMode}) => {
   setDropdown(false)
  }
 //  handle logout
- const handleLogout = () => {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem('username')
-  sessionStorage.removeItem('userId')
-  window.location = '/' //navigate back to default page after logout
-  setBurgerMenu(false)
- }
+
+const handleLogout = async () => {
+  try {
+    const response = await axios.post('http://localhost:8000/api/users/signout', null,{
+      withCredentials: true
+    })
+    if(response.status === 200){
+      setFirstName('')
+      setIsLoggedIn(false)
+      window.location.reload()
+    }
+  } catch (error) {
+     console.log(error)
+  }
+}
+
+
  let menuRef = useRef()
 
+ useEffect(() => {
+  const checkLoggedInUser = async () => {
+    try {
+        const response = await axios.get('http://localhost:8000/api/users/auth', {
+           withCredentials: true
+        });
+        if(response.status === 200){
+            setIsLoggedIn(true)
+            setFirstName(response.data.firstName)
+          
+        }
+
+    } catch (error) {
+        setIsLoggedIn(false)
+        console.log(error)
+        console.log(`Authentication failed: ${error.message}`)
+    }
+}
+ checkLoggedInUser();
+ }, [])
+ 
 
 //  useEffect(() => {
 //     let handler = (e) => {
@@ -74,11 +105,11 @@ const Navbar = ({lightMode, toggleMode}) => {
               <FontAwesomeIcon icon={faUtensils} className="px-2"/>
               <p>MealMate</p>
             </div>
-            {userLoggedIn ? (<>
+            {isLoggedIn ? (<>
               <div className="text-left flex flex-col gap-3 ">
               <div className="flex items-center px-5 gap-1">
                 <FontAwesomeIcon icon={faCircle} className="w-7 h-8"/>
-                <p className="text-xl">{userName}</p>
+                <p className="text-xl">{firstName}</p>
               </div>
               <div className={"flex flex-col items-center justify-center  text-left  rounded-md " + (lightMode ? 'bg-gray-300 text-black' : 'bg-[#1E293B] text-white')}>
                 <Link to="/" onClick={linkTo} className="   border-b-gray-50   border-b border-t w-full px-5 py-3  hover:bg-slate-400  ">Home</Link>
@@ -111,10 +142,10 @@ const Navbar = ({lightMode, toggleMode}) => {
         {/* menu */}
        <div className="hidden md:flex items-center gap-10">
         <div>
-          {userLoggedIn ? (<>
+          {isLoggedIn ? (<>
             <button 
             className={lightMode ? "p-1 w-44 rounded-md bg-gray-300 text-black border border-black" : " bg-[#233147] p-1 w-44 rounded-md bg-transparent border border-gray-50" } 
-            onClick={showDropDown}>{userName} <FontAwesomeIcon icon={faChevronDown}/></button> 
+            onClick={showDropDown}>{firstName} <FontAwesomeIcon icon={faChevronDown}/></button> 
             <div className={dropdown ? "absolute z-10 top-16 right-30  text-black  w-44 rounded-md border border-gray-50": "hidden"}>
               <div className={"flex flex-col items-center justify-center  text-left  rounded-md " + (lightMode ? 'bg-gray-300 text-black' : 'bg-[#1E293B] text-white')}>
                 <Link to="/" onClick={removeDropdrown} className="   border-b-gray-50   border-b w-full px-5 py-2  hover:bg-slate-400 hover:rounded-tl-md hover:rounded-tr-md ">Home</Link>

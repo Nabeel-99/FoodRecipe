@@ -21,16 +21,10 @@ const SignIn = () => {
     const response = await axios.post("http://localhost:8000/api/users/signin", {
       email: formData.email,
       password: formData.password
-    })
-    console.log(response.status)
-    const token = response.data.token
+    }, {withCredentials: true})
 
-    // set token in header requests
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    sessionStorage.setItem('userId', response.data.user._id)
-    sessionStorage.setItem("token", token) //user token
-    sessionStorage.setItem("username", response.data.user.firstName) //store user firstName for rendering on page after login
-    window.location = '/'
+    console.log(response.data)
+    window.location = "/"
   } catch (error) {
       if(error.response && error.response.status >= 400 && error.response.status < 500){
         setError(error.response.data.message)
