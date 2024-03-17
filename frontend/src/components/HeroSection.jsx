@@ -12,7 +12,7 @@ const HeroSection = ({lightMode}) => {
     const API_KEY='1d604e2dfc3d434a8f8a706d553d9933' // APIKEY from spoonacular
     const [foodData, setFoodData] = useState([]) // array for storing details
     const [showSpinner, setShowSpinner] = useState(false)
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
     const currentSection = useRef(null)
     const spinnerSection = useRef(null)
 
@@ -84,12 +84,12 @@ const HeroSection = ({lightMode}) => {
                withCredentials: true
             });
             if(response.status === 200){
-                setIsAuthenticated(true)
+                setIsLoggedIn(true)
                 console.log({message: 'Authenticated'})
             }
 
         } catch (error) {
-            setIsAuthenticated(false)
+            setIsLoggedIn(false)
             console.log(error)
             console.log(`Authentication failed: ${error.message}`)
         }
@@ -107,7 +107,7 @@ const HeroSection = ({lightMode}) => {
     }, [])
   return (
     <>
-    <div className="flex flex-col h-full gap-5">
+    <div className="flex flex-col h-full gap-10">
     <div className="flex flex-col gap-3">
        <div className="text-center leading-tight">
          <h2 className="text-[24px] tracking-tight font-semibold font-sans md:text-[48px]">Can't decide what to eat today?</h2>
@@ -130,7 +130,7 @@ const HeroSection = ({lightMode}) => {
     </div>
     {foodData.length > 0 ? 
         <div id="content" ref={currentSection}>
-            <ContentSection foodData={foodData} handleRegenerate={handleGenerate}  /> 
+            <ContentSection foodData={foodData} handleRegenerate={handleGenerate} isLoggedIn={isLoggedIn}  /> 
         </div> : ( showSpinner &&
             <div id="generate" className="flex items-center justify-center mt-5" ref={spinnerSection}>
              <button type="button" className="bg-green-500 flex text-white p-1 py-2 rounded-md px-4" disabled>
@@ -141,7 +141,7 @@ const HeroSection = ({lightMode}) => {
              </button>
             </div>
     )}
-    <div className="flex items-center justify-center my-10">
+    <div className="py-10">
         <p className="text-[24px] font-serif italic leading-tight tracking-tight md:text-[48px]">Click on the button to generate a variety of Recipes</p>
     </div>
     </div>

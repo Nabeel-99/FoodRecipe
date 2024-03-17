@@ -50,11 +50,8 @@ const UserProfile = () => {
 
     const fetchUserRecipes = async () => {
         try {
-            const token  = sessionStorage.getItem("token")
             const response = await axios.get('http://localhost:8000/api/foodrecipe/getuserrecipes', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+               withCredentials: true
             })
             console.log(response.data)
             setRecipes(response.data)
@@ -86,11 +83,8 @@ const UserProfile = () => {
      // handleRemove item
   const deleteRecipe = async (id) => {
     try {
-      const token = sessionStorage.getItem('token');
       const response = await axios.delete(`http://localhost:8000/api/foodrecipe/deleterecipe/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        withCredentials: true
       })
       setRecipes(recipes.filter(recipe => recipe.id !== id))
       console.log(response.data)

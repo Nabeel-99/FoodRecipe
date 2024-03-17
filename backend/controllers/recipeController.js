@@ -84,6 +84,7 @@ export const postRecipe = async (req, res) => {
              comments,
              user: userId
         })
+        console.log(newRecipe)
         return res.status(201).json({newRecipe, imagePath: imagePath});
    } catch (error) {
         return res.status(400).status({error: error})

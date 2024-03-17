@@ -22,7 +22,7 @@ function App() {
   const [signIn, setSignIn] = useState(false) //signin button
   const [lightMode, setLightMode] = useState(() => { 
     const savedTheme = JSON.parse(sessionStorage.getItem('theme'));
-    return savedTheme ? savedTheme.lightMode : false
+    return savedTheme ? savedTheme.lightMode : true
   }) //handle Darkmode
   const toggleMode = () => {
     setLightMode(!lightMode)
@@ -57,7 +57,7 @@ function App() {
         <Route path="/myrecipedetails/:id" element={<RecipeDetails />}/>
         <Route path="/updaterecipe/:id" element={<UpdateRecipeForm />}/>
         <Route path="/myrecipes" element={<UserProfile />}/>
-        <Route path="/recipeform" element={<RecipeForm />}/>
+        <Route path="/recipeform" element={<RecipeForm  lightMode={lightMode}/>}/>
         <Route path="/favorites" element={<Favorites/>}/>
         <Route path="/details/:id" element={<Details/>} />
       </Routes>

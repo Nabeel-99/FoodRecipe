@@ -49,11 +49,9 @@ const UserRecipes = () => {
     const {id} = useParams()
     const fetchUserRecipes = async () => {
         try {
-            const token  = sessionStorage.getItem("token")
+         
             const response = await axios.get(`http://localhost:8000/api/foodrecipe/getrecipesofuser/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+              withCredentials: true
             })
             console.log(response.data)
             console.log(response.data)

@@ -2,7 +2,7 @@ import axios from "axios"
 import React, { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 
-const RecipeForm = () => {
+const RecipeForm = ({lightMode}) => {
     const [recipeForm, setRecipeForm]= useState({
         title: '',
         recipes: [],
@@ -15,24 +15,20 @@ const RecipeForm = () => {
     const handlePostRecipe = async (e) => {
         e.preventDefault()
         try {
-            // get user Id from storage
-            const userId = sessionStorage.getItem('userId')
-
+          
             const formData = new FormData()
             formData.append( 'title', recipeForm.title )
             formData.append('recipes', recipeForm.recipes)
             formData.append('recipeInstructions', recipeForm.recipeInstructions)
             formData.append('recipeImage',  recipeForm.recipeImage)
             formData.append('comments', recipeForm.comments)
-            formData.append('userId', userId)
+            
 
-            const token = sessionStorage.getItem('token')
-            const response = await axios.post('http://localhost:8000/api/foodrecipe/postrecipe', formData, {
+    
+            const response = await axios.post('http://localhost:8000/api/foodrecipe/postrecipe', formData, {withCredentials : true}, {
                headers: {
-                  Authorization: `Bearer ${token}`,
                  "Content-Type": "multipart/form-data",
-         
-               }
+               }, 
             })
             console.log(response.data)
             if(response.status === 201){
@@ -56,7 +52,7 @@ const RecipeForm = () => {
   return (
     <div className="flex flex-col items-center p-3 md:p-0">
        <h2 className="text-3xl font-bold">Post recipes for other users to explore</h2>
-       <form action="POST" className="bg-white text-black text-left flex flex-col gap-4 p-5 rounded-md w-full mt-6   md:w-[50rem] md:mt-5" onSubmit={handlePostRecipe} >
+       <form action="POST" className={lightMode ? 'bg-white text-black text-left flex flex-col gap-4 p-5 rounded-md w-full mt-6   md:w-[50rem] md:mt-5"' : " bg-[#1E293B] text-white text-left flex flex-col gap-4 p-5 rounded-md w-full mt-6   md:w-[50rem] md:mt-5"} onSubmit={handlePostRecipe} >
             <h2 className="text-3xl font-bold">Add a new recipe</h2>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="recipe-title">Title: <span className="text-red-500 font-bold">*</span></label>
@@ -72,7 +68,7 @@ const RecipeForm = () => {
             </div>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="recipe-image">Upload Image:</label>
-                <input className=" px-3 p-1 rounded-sm border border-black" type="file" accept="image/*" id="recipe-image" onChange={(e) => setRecipeForm({...recipeForm, recipeImage:e.target.files[0]})} required/>
+                <input className=" px-3 p-1 rounded-sm border border-black bg-white text-black" type="file" accept="image/*" id="recipe-image" onChange={(e) => setRecipeForm({...recipeForm, recipeImage:e.target.files[0]})} required/>
             </div>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="comments">Further comments:</label>
