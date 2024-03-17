@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import food from "../assets/food.jpg"
 import foodRecipe from "../assets/recipe.jpg"
 import ContentSection from "./ContentSection"
-import { faSpinner } from "@fortawesome/free-solid-svg-icons"
+import { faL, faSpinner } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
 
@@ -12,6 +12,7 @@ const HeroSection = ({lightMode}) => {
     const API_KEY='1d604e2dfc3d434a8f8a706d553d9933' // APIKEY from spoonacular
     const [foodData, setFoodData] = useState([]) // array for storing details
     const [showSpinner, setShowSpinner] = useState(false)
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
     const currentSection = useRef(null)
     const spinnerSection = useRef(null)
 
@@ -79,20 +80,16 @@ const HeroSection = ({lightMode}) => {
     // verify authtentication after user's login
     const verifyAuthentication = async () => {
         try {
-            const token = sessionStorage.getItem('token')
-            if(!token){
-                console.log('no token found')
-                return
-            }
             const response = await axios.get('http://localhost:8000/api/users/auth', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            console.log(response.data)
-            console.log(response)
-        
+               withCredentials: true
+            });
+            if(response.status === 200){
+                setIsAuthenticated(true)
+                console.log({message: 'Authenticated'})
+            }
+
         } catch (error) {
+            setIsAuthenticated(false)
             console.log(error)
             console.log(`Authentication failed: ${error.message}`)
         }
@@ -110,7 +107,8 @@ const HeroSection = ({lightMode}) => {
     }, [])
   return (
     <>
-    <div className="relative flex flex-col gap-3">
+    <div className="flex flex-col h-full gap-5">
+    <div className="flex flex-col gap-3">
        <div className="text-center leading-tight">
          <h2 className="text-[24px] tracking-tight font-semibold font-sans md:text-[48px]">Can't decide what to eat today?</h2>
          <h2 className="text-[24px] tracking-tighter font-semibold font-sans md:text-[48px]">No Worries! I've got you covered</h2>
@@ -145,6 +143,7 @@ const HeroSection = ({lightMode}) => {
     )}
     <div className="flex items-center justify-center my-10">
         <p className="text-[24px] font-serif italic leading-tight tracking-tight md:text-[48px]">Click on the button to generate a variety of Recipes</p>
+    </div>
     </div>
     </>
   )

@@ -15,9 +15,9 @@ const RecipePosts = () => {
 
   const fetchAllRecipes = async () => {
     try {
-      const token = sessionStorage.getItem('token')
+
       const response = await axios.get(`http://localhost:8000/api/foodrecipe/getallrecipes`, {
-        headers: {Authorization: `Bearer ${token}`}
+        withCredentials: true
       })
       console.log(response.data)
       if(response.status === 201){
@@ -33,9 +33,8 @@ const RecipePosts = () => {
   const handleSearch = async () => {
     setSpinner(true)
     try {
-      const token = sessionStorage.getItem('token');
       const response = await axios.get(`http://localhost:8000/api/foodrecipe/getallrecipes?searchTerm=${searchTerm}`, {
-        headers: { Authorization: `Bearer ${token}` }
+        withCredentials: true
       });
       
       if (response.status === 200) {

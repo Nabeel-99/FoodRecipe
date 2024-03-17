@@ -6,6 +6,8 @@ import recipeRoutes from "./routes/recipeRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
 import path, { dirname } from "path"
 import {fileURLToPath} from "url"
+import cookieParser from "cookie-parser"
+import session from "express-session"
  
 
 dotenv.config()
@@ -15,7 +17,21 @@ const app = express()
 const __filename = fileURLToPath(import.meta.url) // get the file name
 const __dirname = dirname(__filename) // get directory name
 // middlewares
-app.use(cors())
+// app.use(session({
+//     secret: 'secret',
+//     saveUninitialized: false,
+//     resave: false,
+//     cookie: {
+//         secure: true,
+//         httpOnly: true,
+//         maxAge: 1000 * 60 * 60 * 24
+//     }
+// }))
+app.use(cors( {
+    credentials: true,
+    origin: 'http://localhost:5173'
+}))
+app.use(cookieParser())
 app.use(express.json())
 app.use("/Images", express.static(path.join(__dirname, "Images")))// make images accessible in browser
 
