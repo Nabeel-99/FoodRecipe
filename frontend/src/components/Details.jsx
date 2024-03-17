@@ -13,11 +13,8 @@ const Details = () => {
     // fetch recipe details 
     const fetchRecipeDetails = async () => {
         try {
-            const token = sessionStorage.getItem('token')
             const response = await axios.get(`http://localhost:8000/api/foodrecipe/getrecipe/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+              withCredentials: true
             })
             console.log(response.data)
             setDetails({

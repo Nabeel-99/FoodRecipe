@@ -18,9 +18,9 @@ const UpdateRecipeForm = () => {
     // fetch recipe to edit
     const fetchRecipeDetails = async () => {
         try {
-            const token = sessionStorage.getItem('token')
+           
             const response = await axios.get(`http://localhost:8000/api/foodrecipe/fetchrecipe/${id}`, {
-                headers: {Authorization: `Bearer ${token}`}
+                withCredentials: true
             })
             setRecipeForm({
                 title: response.data.title,
@@ -38,7 +38,7 @@ const UpdateRecipeForm = () => {
     const handleUpdateRecipe = async (e) => {
         e.preventDefault();
         try {
-            const token = sessionStorage.getItem('token');
+      
             const formData = new FormData();
             formData.append('title', recipeForm.title);
             formData.append('recipes', recipeForm.recipes);
@@ -49,9 +49,8 @@ const UpdateRecipeForm = () => {
                 formData.append('recipeImage', recipeForm.recipeImage);
             }
     
-            const response = await axios.patch(`http://localhost:8000/api/foodrecipe/updaterecipe/${id}`, formData, {
+            const response = await axios.patch(`http://localhost:8000/api/foodrecipe/updaterecipe/${id}`, formData, {withCredentials: true}, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
                 }
             });

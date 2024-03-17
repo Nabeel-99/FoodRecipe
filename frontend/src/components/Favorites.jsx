@@ -20,11 +20,9 @@ const Favorites = () => {
   //fetch user's favorites
   const fetchFavorites = async () => {
     try {
-      const token = sessionStorage.getItem('token')
+     
       const response = await axios.get(`http://localhost:8000/api/foodrecipe/getuserfavorites`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        withCredentials: true
       })
       setFavorites(response.data)
       console.log(response.data) 
@@ -74,11 +72,9 @@ const Favorites = () => {
   // handleRemove item
   const handleRemove = async (id) => {
     try {
-      const token = sessionStorage.getItem('token');
+
       const response = await axios.delete(`http://localhost:8000/api/foodrecipe/deletefromfavorites/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        withCredentials: true
       })
 
       if(response.status === 201){
@@ -126,7 +122,10 @@ const Favorites = () => {
              </div>
            
              <div className="py-1">
-             <Link to={`/favorites/${recipe._id}`}><button className="bg-orange-500 w-60 p-1 rounded-md mx-auto text-white" >View Details</button></Link>
+             <Link to={`/details/${recipe._id}`}><button className="bg-orange-500 w-60 p-1 rounded-md mx-auto text-white" >View Details</button></Link>
+            </div>
+            <div className="py-1">
+             <button className="bg-red-500 w-60 p-1 rounded-md mx-auto text-white" onClick={() => handleRemove(recipe._id)}>Remove from favorites</button>
             </div>
            </div>
          ))}

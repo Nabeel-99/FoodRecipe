@@ -88,8 +88,14 @@ const RecipePosts = () => {
               Searching...
           </button>)}
     </div>
+
+    {allRecipes.length === 0 && (
+        <div className="flex flex-col h-full">
+           <h3>No available recipes</h3>
+        </div>
+     )}
     <div className="flex flex-col items-center gap-8 justify-center md:grid md:grid-cols-4 md:place-items-center md:jus md:mx-auto md:m-10" >
-    {allRecipes.length > 0 ? allRecipes.map(recipe => (
+    {allRecipes.length > 0 && allRecipes.map(recipe => (
        <div className="flex flex-col items-center rounded-md bg-gray-300 justify-center w-96 shadow-lg md:w-auto  border" key={recipe._id}>
            <img src={`http://localhost:8000/${recipe.recipeImage}`} alt="image" className="object-contain w-80 h-64"/>
            <div className="flex flex-col gap-2 w-full p-2 bg-white items-center rounded-bl-md rounded-br-md">
@@ -103,12 +109,9 @@ const RecipePosts = () => {
            </div>
        </div>
   
-    )) :(<>
-         {displayMessage && <div>{displayMessage}</div>}
-        </>
-        )
-    }
+    ))}
      </div>
+    
     </>
   )
 }

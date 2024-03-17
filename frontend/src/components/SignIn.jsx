@@ -1,4 +1,4 @@
-import  { useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { Link, useNavigate} from "react-router-dom"
 import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -31,6 +31,27 @@ const SignIn = () => {
       }
   }
  }
+
+ useEffect(() => {
+  // check if user already logged in go to the home page
+   const checkLoggedInUser = async () => {
+     try {
+        const response = await axios.get("http://localhost:8000/api/users/auth", {
+          withCredentials: true
+        })
+        if(response.status === 200){
+          window.location = '/'
+          console.log('alread logged in')
+          console.log(response.data)
+        }else{
+           navigate('/signin')
+        }
+     } catch (error) {
+        console.log(error)
+     }
+   }
+   checkLoggedInUser()
+ }, [])
   return (
     <>
     <div className="flex flex-col items-center justify-center h-full">

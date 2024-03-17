@@ -6,16 +6,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
 
 
-const ContentSection = ({foodData, handleRegenerate}) => {
+
+const ContentSection = ({foodData, handleRegenerate, isLoggedIn}) => {
   const spinnerSectionRef = React.useRef(null); 
   const [isLiked, setIsLiked] = useState(false)
   const [favoriteMessageDisplay, setFavoriteMessageDisplay] = useState(false)
   const [loginMessageDisplay, setLoginMessageDisplay] = useState(false)
-  const userLoggedIn = sessionStorage.getItem('token')
+ 
 
   const handleToggle = async() => {
-
-    if(!userLoggedIn){
+    if(!isLoggedIn){
       // display message to login before adding to favorite
       setLoginMessageDisplay(true)
       setTimeout(() => {
@@ -37,7 +37,7 @@ const ContentSection = ({foodData, handleRegenerate}) => {
    // if user likes add to database
   const addToFavorites = async () => {  
     try {
-         const token = sessionStorage.getItem('token')
+  
 
          const response = await axios.post("http://localhost:8000/api/foodrecipe/addtofavorites", {
           // using foodData[0] because it is an array of objects and we only want to access
@@ -48,9 +48,7 @@ const ContentSection = ({foodData, handleRegenerate}) => {
           image: foodData[0].image,
         
         }, {
-          headers: {
-            Authorization: `Bearer ${token}` //token authorization
-          }
+          withCredentials: true
         })
         console.log(`foodData: ${foodData}`)
         console.log(response.data)
@@ -70,11 +68,9 @@ const ContentSection = ({foodData, handleRegenerate}) => {
     // if the user unlikes delete from database
   const removeFromFavorites = async () => {
     try {
-      const token = sessionStorage.getItem('token')
+  
       const response = await axios.delete(`http://localhost:8000/api/foodrecipe/removefromfavorites/${foodData[0].title}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        withCredentials: true
       })
       console.log(response.data)
       if(response.status === 201){
