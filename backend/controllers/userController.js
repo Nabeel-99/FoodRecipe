@@ -2,6 +2,7 @@ import Joi from "joi";
 import userModel from "../model/userModel.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import recipePostModel from "../model/recipePostModel.js";
 const {validate, User} = userModel // destructure validate and User from userModel file
 // create user
 export const createUser = async (req, res) => {
@@ -48,7 +49,7 @@ export const loginUser = async (req, res) => {
             return res.status(409).json({message: "Invalid Email or Password"})
         }
         // create token for user
-        const token = jwt.sign({userId: user._id}, process.env.JWT_PRIVATE_KEY, {expiresIn: '1h'})
+        const token = jwt.sign({userId: user._id}, process.env.JWT_PRIVATE_KEY, {expiresIn: '2d'})
        
 
         //set token in cookies
@@ -97,6 +98,22 @@ export const logout = (req, res) => {
         return res.status(400).json({error: `error logging out ${error}`})
     }
 
+}
+
+// delete account
+export const deleteAccount = async (req, res) => {
+    try {
+        const userId = req.userId
+        const deletedUser = await User.findByIdAndDelete(userId)
+        if(deletedUser){
+            res.clearCookie('token')
+            await recipePostModel.deleteMany({user: userId})
+        }
+        console.log('deleted user', deletedUser)
+        return res.status(200).json(deletedUser)
+    } catch (error) {
+        return res.status(400).json(error)
+    }
 }
 
 

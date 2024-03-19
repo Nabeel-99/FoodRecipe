@@ -2,10 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {faGithub} from "@fortawesome/free-brands-svg-icons"
-import {faBars, faMoon,  faUtensils, faXmark, faCircle, faChevronDown, faL} from '@fortawesome/free-solid-svg-icons'
+import {faBars, faUtensils, faMoon, faXmark, faCircle, faChevronDown, } from '@fortawesome/free-solid-svg-icons'
 import logo from "../assets/logo.png"
 import logoWhite from '../assets/logow.png'
 import axios from "axios"
+import { TbBrightnessUp } from "react-icons/tb"
+import { FaBars, FaXmark, FaGithub, FaMoon } from "react-icons/fa6"
+import Modal from "react-modal"
 
 
 const Navbar = ({lightMode, toggleMode}) => {
@@ -14,6 +17,9 @@ const Navbar = ({lightMode, toggleMode}) => {
   const [dropdown, setDropdown] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [firstName, setFirstName] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const burgerMenuRef = useRef()
+  const dropdownRef = useRef()
 //  display burger menu
   const displayBurgerMenu = () => {
     setBurgerMenu(!burgerMenu)
@@ -41,16 +47,31 @@ const handleLogout = async () => {
     if(response.status === 200){
       setFirstName('')
       setIsLoggedIn(false)
-      window.location.reload()
+      window.location = '/'
     }
   } catch (error) {
      console.log(error)
   }
 }
 
-
- let menuRef = useRef()
-
+const openModal = () => {
+  setIsModalOpen(!isModalOpen)
+}
+const closeModal =() => {
+  setIsModalOpen(false)
+}
+// handle delete account
+const deleteAccount = async () => {
+  try {
+    const response = await axios.delete('http://localhost:8000/api/users/deleteaccount', {
+      withCredentials: true
+    })
+    console.log({message: 'user successfully deleted'})
+    window.location = '/'
+  } catch (error) {
+    console.log(error)
+  }
+}
  useEffect(() => {
   const checkLoggedInUser = async () => {
     try {
@@ -73,33 +94,39 @@ const handleLogout = async () => {
  }, [])
  
 
-//  useEffect(() => {
-//     let handler = (e) => {
-//       if(!menuRef.current.contains(e.target)){
-//         setBurgerMenu(false)
-//         setDropdown(false)
-//       }
-//     }
-//     document.addEventListener('mousedown', handler)
-//     return () => {
-//       document.removeEventListener('mousedown', handler)
-//     }
-//  })
+ useEffect(() => {
+    const handleClickOutside = (event) => {
+      if(!burgerMenuRef.current.contains(event.target)){
+        setBurgerMenu(false)
+      }
+      if(!dropdownRef.current.contains(event.target)){
+        setDropdown(false)
+      }
+      
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+ }, [])
  
 
   return (
-    <div className="flex justify-between items-start w-screen py-6 px-2 md:px-12">
-       <div><img src={lightMode ? logo: logoWhite} alt="logo"/></div>
+    <div className="flex justify-between items-center w-screen py-6 px-2 md:px-12">
+       <div><Link to="/"><img src={lightMode ? logo: logoWhite} alt="logo"/></Link></div>
        {/* burger menu */}
-       <div  >
-        <Link to="https://github.com/Nabeel-99/FoodRecipe.git" target="_blank"><FontAwesomeIcon icon={faGithub} className={lightMode ? "w-7 h-7 mr-3 md:hidden" : '"w-7 h-7 mr-6 md:hidden'}/></Link>
-        {lightMode ? <button id="moon" onClick={toggleMode}><FontAwesomeIcon icon={faMoon} className="w-6 h-7 px-3 md:hidden"/></button>: <button id="sun" onClick={toggleMode}><svg className="h-6 w-6 mr-3 fill-current md:hidden" viewBox="0 0 100 100" fill="none"><path d="M50 23.61c-14.55 0-26.388 11.839-26.388 26.388 0 14.55 11.839 26.388 26.388 26.388 14.55 0 26.388-11.838 26.388-26.388 0-14.55-11.839-26.388-26.388-26.388zm0 45.369c-10.466 0-18.98-8.515-18.98-18.98 0-10.463 8.514-18.982 18.98-18.982 10.466 0 18.98 8.519 18.98 18.981 0 10.466-8.514 18.98-18.98 18.98zM50 18.209a3.705 3.705 0 003.704-3.704V3.704a3.704 3.704 0 00-7.407 0v10.801A3.703 3.703 0 0050 18.209zM50 81.786a3.704 3.704 0 00-3.704 3.703v10.804a3.704 3.704 0 007.408 0V85.489A3.706 3.706 0 0050 81.786zM96.296 46.295H85.495a3.704 3.704 0 000 7.407h10.801a3.704 3.704 0 000-7.407zM18.21 49.998a3.702 3.702 0 00-3.703-3.703H3.704a3.704 3.704 0 000 7.407h10.803a3.704 3.704 0 003.703-3.704zM77.716 27.52l7.636-7.64a3.704 3.704 0 000-5.236 3.701 3.701 0 00-5.236 0l-7.637 7.637a3.703 3.703 0 105.237 5.238zM22.282 72.477l-7.638 7.639a3.703 3.703 0 105.237 5.236l7.638-7.635a3.709 3.709 0 000-5.24 3.703 3.703 0 00-5.236 0zM77.718 72.48a3.705 3.705 0 00-5.24 0 3.706 3.706 0 000 5.237l7.64 7.635a3.703 3.703 0 105.236-5.236l-7.636-7.635zM22.282 27.52a3.704 3.704 0 005.237-5.24l-7.638-7.638a3.705 3.705 0 00-5.237 0 3.706 3.706 0 000 5.237l7.638 7.64z" fill="fill-current"></path></svg></button>  }
+       <div className="flex gap-5 items-center justify-center" >
+        <Link to="https://github.com/Nabeel-99/FoodRecipe.git" target="_blank"><FaGithub className="w-7 h-7 md:hidden"/></Link>
+        {lightMode ? <button id="moon" onClick={toggleMode} ><FaMoon className="w-7 h-7 md:hidden"/></button>: 
+          <button id="sun" onClick={toggleMode}>
+            <TbBrightnessUp className="w-7 h-7 md:hidden" />
+            </button> }
         <button  onClick={displayBurgerMenu} className="transition duration-75 ease-in-out">
-          <FontAwesomeIcon icon={burgerMenu ? faXmark : faBars} className="w-6 h-7  mt-3 px-3 md:hidden "/>
+          {burgerMenu ?  <FaXmark className="w-7 h-9 md:hidden"/> : <FaBars className="w-7 h-7 md:hidden"/> }
         </button>
        </div>
         {/* burger menu dropdown*/}
-        <div  ref={menuRef} className={burgerMenu ? "z-20 absolute top-20  right-5  text-black  w-72  shadow-md md:hidden" : "hidden"}>
+        <div  ref={burgerMenuRef} className={burgerMenu ? "z-20 absolute top-20  right-5  text-black  w-72  shadow-md md:hidden" : "hidden"}>
           <div  className={"flex flex-col gap-4 rounded-md border  " + (lightMode ? 'bg-gray-300 border-black ' : 'bg-[#1E293B] text-white')}> 
             <div className={ lightMode? "flex items-center  border-b border-b-black p-2" : "flex items-center border-b p-2"}>
               <FontAwesomeIcon icon={faUtensils} className="px-2"/>
@@ -118,7 +145,41 @@ const handleLogout = async () => {
                 <Link to="/myrecipes" onClick={linkTo} className="   border-b-gray-50   border-b  w-full px-5  py-3 hover:bg-slate-400 ">My recipes</Link>
                 <Link to="/favorites" onClick={linkTo} className="  border-b-gray-50   border-b  w-full px-5 py-3  hover:bg-slate-400 ">Favorites</Link>
                 <button className=" w-full px-5  text-red-500 text-left  py-3 hover:bg-red-200 " onClick={handleLogout}>Log out</button>
-                <button className=" border-b-gray-50   border-t w-full px-5 text-left  text-red-500 py-3 hover:bg-red-200">Delete Account</button>
+                <button onClick={() => {
+                  openModal()
+                  linkTo()
+                }}  className=" border-b-gray-50   border-t w-full px-5 text-left  text-red-500 py-3 hover:bg-red-200">Delete Account</button>
+                <Modal
+                  isOpen={isModalOpen}
+                  onRequestClose={closeModal}
+                  contentLabel="Confirmation Modal"
+                  style={{
+                    overlay: {
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      zIndex: 1000,
+                    },
+                    content: {
+                      top: '50%',
+                      left: '50%',
+                      right: 'auto',
+                      bottom: 'auto',
+                      marginRight: '-50%',
+                      transform: 'translate(-50%, -50%)',
+                      maxWidth: '400px',
+                      padding: '20px',
+                      borderRadius: '8px',
+                      boxShadow: '0px 4px 24px rgba(0, 0, 0, 0.1)',
+                    },
+                  }}
+                >
+                 <div className="flex flex-col items-center justify-center">
+                 <h2>Are you sure you want to delete your account?</h2>
+                  <div className="flex gap-4">
+                     <button onClick={deleteAccount} className="bg-gray-50 hover:bg-gray-100 p-1 border rounded-md px-3">Yes</button>
+                     <button onClick={closeModal} className="bg-gray-50 hover:bg-gray-100 p-1 border rounded-md px-3">No</button>
+                  </div>
+                 </div>
+                </Modal>
               </div>
             </div>
           
@@ -139,33 +200,65 @@ const handleLogout = async () => {
         </div>
         {/* menu */}
        <div className="hidden md:flex items-center gap-10">
-        <div>
+        <div ref={dropdownRef}>
           {isLoggedIn ? (<>
             <button 
             className={lightMode ? "p-1 w-44 rounded-md bg-gray-300 text-black border border-black" : " bg-[#233147] p-1 w-44 rounded-md bg-transparent border border-gray-50" } 
             onClick={showDropDown}>{firstName} <FontAwesomeIcon icon={faChevronDown}/></button> 
-            <div className={dropdown ? "absolute z-10 top-16 right-30  text-black  w-44 rounded-md border border-gray-50": "hidden"}>
+            <div  className={dropdown ? "absolute z-10 top-20 right-30  text-black  w-44 rounded-md border border-gray-50": "hidden"}>
               <div className={"flex flex-col items-center justify-center  text-left  rounded-md " + (lightMode ? 'bg-gray-300 text-black' : 'bg-[#1E293B] text-white')}>
                 <Link to="/" onClick={removeDropdrown} className="   border-b-gray-50   border-b w-full px-5 py-2  hover:bg-slate-400 hover:rounded-tl-md hover:rounded-tr-md ">Home</Link>
                 <Link to="/recipes" onClick={removeDropdrown} className="  border-b-gray-50   border-b  w-full px-5 py-2  hover:bg-slate-400 ">Explore recipes</Link>
                 <Link to="/recipeform" onClick={removeDropdrown} className="   border-b-gray-50   border-b w-full px-5  py-2 hover:bg-slate-400 ">Post recipes</Link>
                 <Link to="/myrecipes" onClick={removeDropdrown} className="   border-b-gray-50   border-b  w-full px-5  py-2 hover:bg-slate-400 ">My recipes</Link>
                 <Link to="/favorites" onClick={removeDropdrown} className="  border-b-gray-50   border-b  w-full px-5 py-2  hover:bg-slate-400 ">Favorites</Link>
-                <button className=" w-full px-5  text-red-500 text-left  py-2 hover:bg-red-200 hover:rounded-bl-md hover:rounded-br-md" onClick={handleLogout}>Log out</button>
-                <button className=" border-b-gray-50   border-b w-full px-5 text-left  text-red-500 py-2 hover:bg-red-200">Delete Account</button>
+                <button className=" w-full px-5  text-red-500 text-left  py-2 hover:bg-red-200" onClick={handleLogout}>Log out</button>
+                <button onClick={openModal} className=" border-b-gray-50   border-t w-full px-5 text-left  text-red-500 py-2 hover:bg-red-200 hover:rounded-bl-md hover:rounded-br-md">Delete Account</button>
+                <Modal
+                  isOpen={isModalOpen}
+                  onRequestClose={closeModal}
+                  contentLabel="Confirmation Modal"
+                  style={{
+                    overlay: {
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      zIndex: 1000,
+                    },
+                    content: {
+                      top: '50%',
+                      left: '50%',
+                      right: 'auto',
+                      bottom: 'auto',
+                      marginRight: '-50%',
+                      transform: 'translate(-50%, -50%)',
+                      maxWidth: '400px',
+                      padding: '20px',
+                      borderRadius: '8px',
+                      boxShadow: '0px 4px 24px rgba(0, 0, 0, 0.1)',
+                    },
+                  }}
+                >
+                 <div className="flex flex-col items-center justify-center">
+                 <h2>Are you sure you want to delete your account?</h2>
+                  <div className="flex gap-4">
+                     <button onClick={deleteAccount} className="bg-gray-50 hover:bg-gray-100 p-1 border rounded-md px-3">Yes</button>
+                     <button onClick={closeModal} className="bg-gray-50 hover:bg-gray-100 p-1 border rounded-md px-3">No</button>
+                  </div>
+                 </div>
+                </Modal>
               </div> 
           </div>
           </>) : (
               <Link to="/signin" ><button className={lightMode ? "p-1 w-32 rounded-md bg-transparent border border-black" : "p-1 w-32 rounded-md bg-transparent border border-white"}>Sign in</button></Link>
           )}
         </div>
-        <div className="flex gap-5 items-center justify-center justify-items-center">
-          {lightMode ? <button id="moon" onClick={toggleMode}><FontAwesomeIcon icon={faMoon} className="w-6 h-6"/></button> :  <button id="sun" onClick={toggleMode}><svg className="h-6 w-6 fill-current" viewBox="0 0 100 100" fill="none"><path d="M50 23.61c-14.55 0-26.388 11.839-26.388 26.388 0 14.55 11.839 26.388 26.388 26.388 14.55 0 26.388-11.838 26.388-26.388 0-14.55-11.839-26.388-26.388-26.388zm0 45.369c-10.466 0-18.98-8.515-18.98-18.98 0-10.463 8.514-18.982 18.98-18.982 10.466 0 18.98 8.519 18.98 18.981 0 10.466-8.514 18.98-18.98 18.98zM50 18.209a3.705 3.705 0 003.704-3.704V3.704a3.704 3.704 0 00-7.407 0v10.801A3.703 3.703 0 0050 18.209zM50 81.786a3.704 3.704 0 00-3.704 3.703v10.804a3.704 3.704 0 007.408 0V85.489A3.706 3.706 0 0050 81.786zM96.296 46.295H85.495a3.704 3.704 0 000 7.407h10.801a3.704 3.704 0 000-7.407zM18.21 49.998a3.702 3.702 0 00-3.703-3.703H3.704a3.704 3.704 0 000 7.407h10.803a3.704 3.704 0 003.703-3.704zM77.716 27.52l7.636-7.64a3.704 3.704 0 000-5.236 3.701 3.701 0 00-5.236 0l-7.637 7.637a3.703 3.703 0 105.237 5.238zM22.282 72.477l-7.638 7.639a3.703 3.703 0 105.237 5.236l7.638-7.635a3.709 3.709 0 000-5.24 3.703 3.703 0 00-5.236 0zM77.718 72.48a3.705 3.705 0 00-5.24 0 3.706 3.706 0 000 5.237l7.64 7.635a3.703 3.703 0 105.236-5.236l-7.636-7.635zM22.282 27.52a3.704 3.704 0 005.237-5.24l-7.638-7.638a3.705 3.705 0 00-5.237 0 3.706 3.706 0 000 5.237l7.638 7.64z" fill="fill-current"></path></svg></button>  }
-          <Link to="https://github.com/Nabeel-99/FoodRecipe.git" target="_blank"><FontAwesomeIcon icon={faGithub} className={lightMode ? 'w-6 h-6 text-black'  : 'w-6 h-6 text-white'} /></Link>
+        <div className="flex  gap-3 items-center justify-center">
+          {lightMode ? <button id="moon" onClick={toggleMode}><FaMoon className="w-7 h-7"/></button> :  <button id="sun" onClick={toggleMode}><TbBrightnessUp className="w-7 h-7 " /></button>  }
+          <Link to="https://github.com/Nabeel-99/FoodRecipe.git" target="_blank"><FaGithub className="w-7 h-7 "/></Link>
         </div>
        </div>
     </div>
   )
 }
+
 
 export default Navbar

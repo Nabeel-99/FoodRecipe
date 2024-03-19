@@ -173,9 +173,14 @@ export const getAllRecipes = async (req, res) => {
         const {searchTerm} = req.query
         let recipes;
         if(searchTerm){
-            recipes = await recipePostModel.find({title: { $regex: new RegExp(searchTerm, 'i')}}).populate('user', 'firstName lastName')
+            recipes = await recipePostModel.find({
+                title: { $regex: new RegExp(searchTerm, 'i')},
+                user: { $ne: null }
+            }).populate('user', 'firstName lastName')
         }else{
-            recipes = await recipePostModel.find({}).populate('user', 'firstName lastName')
+            recipes = await recipePostModel.find({
+                user: {$ne: null}
+            }).populate('user', 'firstName lastName')
         }
         if(recipes.length === 0)
             return res.status(201).json({message: 'No recipes to explore'})
