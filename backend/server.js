@@ -29,7 +29,7 @@ const __dirname = dirname(__filename) // get directory name
 // }))
 app.use(cors( {
     credentials: true,
-    origin: 'http://localhost:5173'
+    origin: ['http://localhost:5173', 'https://food-recipe-zeta-plum.vercel.app']
 }))
 app.use(cookieParser())
 app.use(express.json())
