@@ -55,8 +55,8 @@ function App() {
         <Route path="/recipes" element={<RecipePosts />}/>
         <Route path="/user/:id" element={<UserRecipes />}/>
         <Route path="/myrecipedetails/:id" element={<RecipeDetails />}/>
-        <Route path="/updaterecipe/:id" element={<UpdateRecipeForm />}/>
-        <Route path="/myrecipes" element={<UserProfile />}/>
+        <Route path="/updaterecipe/:id" element={<UpdateRecipeForm lightMode={lightMode} />}/>
+        <Route path="/myrecipes" element={<UserProfile  />}/>
         <Route path="/recipeform" element={<RecipeForm  lightMode={lightMode}/>}/>
         <Route path="/favorites" element={<Favorites/>}/>
         <Route path="/details/:id" element={<Details/>} />

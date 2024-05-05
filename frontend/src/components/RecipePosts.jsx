@@ -63,6 +63,7 @@ const RecipePosts = () => {
 
   return (
     <>
+  
       <div className="text-3xl">Explore Recipes</div>
       <div className="flex items-center gap-2 justify-center mx-auto md:gap-5 ">
         <div className="bg-white p-1 py-2 rounded-md border border-black text-left text-black">
@@ -88,7 +89,7 @@ const RecipePosts = () => {
         )}
       </div>
       <div className="flex flex-col items-center justify-center h-full">
-        {allRecipes.length > 0 ? (
+        {allRecipes.length  > 0 ? (
           <div className="flex flex-col p-3 items-center justify-center md:grid md:grid-cols-3 gap-10">
             {allRecipes.filter(recipe => recipe.user).map((recipe) => (
               <div className="flex flex-col items-center rounded-md bg-gray-300 justify-center w-96 shadow-lg md:w-auto  border" key={recipe._id}>
@@ -107,10 +108,13 @@ const RecipePosts = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center">
-            <h3>No recipe to explore</h3>
+            <h3 className="text-white">No recipe to explore</h3>
           </div>
         )}
+
+  
       </div>
+      
     </>
   )
 }

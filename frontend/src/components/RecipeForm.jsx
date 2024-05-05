@@ -56,23 +56,23 @@ const RecipeForm = ({lightMode}) => {
             <h2 className="text-3xl font-bold">Add a new recipe</h2>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="recipe-title">Title: <span className="text-red-500 font-bold">*</span></label>
-                 <input className=" px-3 p-1 rounded-sm border border-black" type="text" id="recipe-title" value={recipeForm.title} onChange={(e) => setRecipeForm({...recipeForm, title: e.target.value})} required/>
+                 <input className={lightMode ? " text-black px-3 p-1 rounded-sm border border-black" : "text-white bg-[#0b0e1a] px-3 p-1 rounded-sm border border-black"} type="text" id="recipe-title" value={recipeForm.title} onChange={(e) => setRecipeForm({...recipeForm, title: e.target.value})} required/>
             </div>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="recipes">Recipes: <span className="text-red-500 font-bold">*</span></label>
-                 <textarea className=" h-36 px-3 p-1 rounded-sm border border-black" type="text" id="recipes" value={recipeForm.recipes} onChange={(e) => setRecipeForm({...recipeForm, recipes: e.target.value})} required/>
+                 <textarea className={lightMode ? " h-36 px-3 p-1 rounded-sm border border-black" :" h-36 px-3 p-1 bg-[#0b0e1a] rounded-sm border border-black"}  type="text" id="recipes" value={recipeForm.recipes} onChange={(e) => setRecipeForm({...recipeForm, recipes: e.target.value})} required/>
             </div>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="recipe-instructions">Recipe Instructions: <span className="text-red-500 font-bold">*</span></label>
-                 <textarea className=" h-36 px-3 p-1 rounded-sm border border-black" type="text" id="recipe-instructions" value={recipeForm.recipeInstructions} onChange={(e) => setRecipeForm({...recipeForm, recipeInstructions:e.target.value})} required/>
+                 <textarea className={lightMode ? " h-36 px-3 p-1 rounded-sm border border-black" :" h-36 px-3 p-1 bg-[#0b0e1a] rounded-sm border border-black"}  type="text" id="recipe-instructions" value={recipeForm.recipeInstructions} onChange={(e) => setRecipeForm({...recipeForm, recipeInstructions:e.target.value})} required/>
             </div>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="recipe-image">Upload Image:</label>
-                <input className=" px-3 p-1 rounded-sm border border-black bg-white text-black" type="file" accept="image/*" id="recipe-image" onChange={(e) => setRecipeForm({...recipeForm, recipeImage:e.target.files[0]})} required/>
+                <input className={lightMode ? " text-black px-3 p-1 rounded-sm border border-black" : "text-white bg-[#0b0e1a] px-3 p-1 rounded-sm border border-black"} type="file" accept="image/*" id="recipe-image" onChange={(e) => setRecipeForm({...recipeForm, recipeImage:e.target.files[0]})} required/>
             </div>
             <div className="flex flex-col">
                 <label className="mb-2" htmlFor="comments">Further comments:</label>
-                <textarea className=" h-36 px-3 p-1 rounded-sm border border-black" type="text" id="comments" placeholder="type for example 'lovely recipe, I hope you enjoy it'... " value={recipeForm.comments} onChange={(e) => setRecipeForm({...recipeForm, comments:e.target.value})} />
+                <textarea className={lightMode ? " h-36 px-3 p-1 rounded-sm border border-black" :" h-36 px-3 p-1 bg-[#0b0e1a] rounded-sm border border-black"}  type="text" id="comments" placeholder="type for example 'lovely recipe, I hope you enjoy it'... " value={recipeForm.comments} onChange={(e) => setRecipeForm({...recipeForm, comments:e.target.value})} />
             </div>
             {error && <div className="border bg-red-500 text-white"> {error} </div>}
             <div className="flex items-center justify-between">

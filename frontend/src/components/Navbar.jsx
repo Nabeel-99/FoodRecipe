@@ -172,10 +172,10 @@ const deleteAccount = async () => {
                   }}
                 >
                  <div className="flex flex-col items-center justify-center">
-                 <h2>Are you sure you want to delete your account?</h2>
+                 <h2 className="text-black">Are you sure you want to delete your account?</h2>
                   <div className="flex gap-4">
-                     <button onClick={deleteAccount} className="bg-gray-50 hover:bg-gray-100 p-1 border rounded-md px-3">Yes</button>
-                     <button onClick={closeModal} className="bg-gray-50 hover:bg-gray-100 p-1 border rounded-md px-3">No</button>
+                     <button onClick={deleteAccount} className="bg-green-500 hover:bg-green-500 p-1 border text-black rounded-md px-3">Yes</button>
+                     <button onClick={closeModal} className="bg-red-500 hover:bg-red-500 p-1 border text-black  rounded-md px-3">No</button>
                   </div>
                  </div>
                 </Modal>
@@ -237,10 +237,10 @@ const deleteAccount = async () => {
                   }}
                 >
                  <div className="flex flex-col items-center justify-center">
-                 <h2>Are you sure you want to delete your account?</h2>
+                 <h2 className="text-black ">Are you sure you want to delete your account?</h2>
                   <div className="flex gap-4">
-                     <button onClick={deleteAccount} className="bg-gray-50 hover:bg-gray-100 p-1 border rounded-md px-3">Yes</button>
-                     <button onClick={closeModal} className="bg-gray-50 hover:bg-gray-100 p-1 border rounded-md px-3">No</button>
+                     <button onClick={deleteAccount} className="bg-green-500 text-white hover:bg-green-600 p-1 border rounded-md px-3">Yes</button>
+                     <button onClick={closeModal} className="bg-red-500 text-white  hover:bg-red-600 p-1 border rounded-md px-3">No</button>
                   </div>
                  </div>
                 </Modal>
