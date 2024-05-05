@@ -23,7 +23,7 @@ const SignIn = () => {
       password: formData.password
     }, {withCredentials: true})
 
-    console.log(response.data)
+
     window.location = "/"
   } catch (error) {
       if(error.response && error.response.status >= 400 && error.response.status < 500){
@@ -41,8 +41,6 @@ const SignIn = () => {
         })
         if(response.status === 200){
           window.location = '/'
-          console.log('alread logged in')
-          console.log(response.data)
         }else{
            navigate('/signin')
         }

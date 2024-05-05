@@ -53,7 +53,7 @@ const UserProfile = () => {
             const response = await axios.get('http://localhost:8000/api/foodrecipe/getuserrecipes', {
                withCredentials: true
             })
-            console.log(response.data)
+
             setRecipes(response.data)
         } catch (error) {
             console.log(error)
@@ -87,8 +87,6 @@ const UserProfile = () => {
         withCredentials: true
       })
       setRecipes(recipes.filter(recipe => recipe.id !== id))
-      console.log(response.data)
-      console.log('successfully deleted')
       window.location.reload()
     } catch (error) {
       console.log(error)

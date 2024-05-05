@@ -66,7 +66,6 @@ const deleteAccount = async () => {
     const response = await axios.delete('http://localhost:8000/api/users/deleteaccount', {
       withCredentials: true
     })
-    console.log({message: 'user successfully deleted'})
     window.location = '/'
   } catch (error) {
     console.log(error)

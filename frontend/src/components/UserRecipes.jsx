@@ -53,15 +53,12 @@ const UserRecipes = () => {
             const response = await axios.get(`http://localhost:8000/api/foodrecipe/getrecipesofuser/${id}`, {
               withCredentials: true
             })
-            console.log(response.data)
-            console.log(response.data)
             setRecipes(response.data)
             const name = response.data[0]?.user
             if(name){
                const fullName = `${name.firstName} ${name.lastName}`
                setUsername(fullName)
             }
-            console.log(username)
         } catch (error) {
             console.log(error)
         }

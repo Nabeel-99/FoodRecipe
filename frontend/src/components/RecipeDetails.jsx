@@ -17,7 +17,6 @@ const RecipeDetails = () => {
             const response = await axios.get(`http://localhost:8000/api/foodrecipe/getrecipedetails/${id}`, {
                 withCredentials: true
             })
-            console.log(response.data)
             setRecipeDetails({
                 title: response.data.title,
                 recipe: response.data.recipes,

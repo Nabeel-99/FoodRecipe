@@ -26,8 +26,7 @@ const SignUp = () => {
             lastName: formData.lastName,
             password: formData.password
         })
-        console.log(response.data);
-        console.log(response.message)
+ 
         navigate("/signin") //navigate to sign in page
     } catch (error) {
         if(error.response && error.response.status >= 400 && error.response.status < 500){

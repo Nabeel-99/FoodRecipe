@@ -30,7 +30,7 @@ const RecipeForm = ({lightMode}) => {
                  "Content-Type": "multipart/form-data",
                }, 
             })
-            console.log(response.data)
+
             if(response.status === 201){
                 setRecipeForm({
                     title: '',
@@ -41,7 +41,7 @@ const RecipeForm = ({lightMode}) => {
                 })
                 navigate('/myrecipes')
             }
-            console.log(response.data)
+
         } catch (error) {
             if(error.response && error.response.status >= 400 && error.response.status < 500){
                 setError(error.response.data.message)

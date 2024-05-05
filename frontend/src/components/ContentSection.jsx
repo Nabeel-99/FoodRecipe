@@ -50,14 +50,14 @@ const ContentSection = ({foodData, handleRegenerate, isLoggedIn}) => {
         }, {
           withCredentials: true
         })
-        console.log(`foodData: ${foodData}`)
-        console.log(response.data)
+
+
         if(response.status === 201){
           setFavoriteMessageDisplay(true)
           setTimeout(() => {
             setFavoriteMessageDisplay(false)
           }, 2000);
-          console.log("Added to favorites")
+
         }    
       }  
     catch (error) {
@@ -72,10 +72,7 @@ const ContentSection = ({foodData, handleRegenerate, isLoggedIn}) => {
       const response = await axios.delete(`http://localhost:8000/api/foodrecipe/removefromfavorites/${foodData[0].title}`, {
         withCredentials: true
       })
-      console.log(response.data)
-      if(response.status === 201){
-         console.log("removed from favorites")
-      }
+    
     } catch (error) {
       console.log(`Error removing from favoirtes: ${error}`)
     }

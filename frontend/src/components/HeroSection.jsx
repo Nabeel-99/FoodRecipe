@@ -55,7 +55,7 @@ const HeroSection = ({lightMode}) => {
                         
                     }
                 ])
-                console.log(foodData)
+
                 //scroll to section
                if(currentSection.current){
                     currentSection.current.scrollIntoView({behavior : 'smooth'})
@@ -85,7 +85,6 @@ const HeroSection = ({lightMode}) => {
             });
             if(response.status === 200){
                 setIsLoggedIn(true)
-                console.log({message: 'Authenticated'})
             }
 
         } catch (error) {
@@ -97,7 +96,7 @@ const HeroSection = ({lightMode}) => {
 
     useEffect(() => {
      //handleGenerate
-     console.log(foodData)
+
       
     }, [foodData])
     

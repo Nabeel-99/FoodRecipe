@@ -28,7 +28,6 @@ const UpdateRecipeForm = () => {
                 recipeInstructions: response.data.recipeInstructions,
                 comments: response.data.comments
             })
-            console.log(response.data)
             setImagePreview(`http://localhost:8000/${response.data.recipeImage}`)
         } catch (error) {
             console.log(error)
@@ -57,7 +56,6 @@ const UpdateRecipeForm = () => {
     
             if (response.status === 200) {
                 // Assuming the response.data contains the updated recipe
-                console.log(response.data)
                 navigate("/myrecipes")
             } else {
                 // Handle other status codes if necessary

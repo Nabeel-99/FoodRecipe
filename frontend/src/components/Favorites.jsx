@@ -25,7 +25,6 @@ const Favorites = () => {
         withCredentials: true
       })
       setFavorites(response.data)
-      console.log(response.data) 
     } catch (error) {
       console.log(error)
     }
@@ -78,7 +77,7 @@ const Favorites = () => {
       })
 
       if(response.status === 201){
-        console.log('removed successfully')
+
         setFavorites(favorites.filter(recipe => recipe.id !== id))
         window.location.reload();
       }else{
