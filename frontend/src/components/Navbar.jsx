@@ -6,7 +6,7 @@ import {faBars, faUtensils, faMoon, faXmark, faCircle, faChevronDown, } from '@f
 import logo from "../assets/logo.png"
 import logoWhite from '../assets/logow.png'
 import axios from "axios"
-import { TbBrightnessUp } from "react-icons/tb"
+import { FaSun } from "react-icons/fa6"
 import { FaBars, FaXmark, FaGithub, FaMoon } from "react-icons/fa6"
 import Modal from "react-modal"
 
@@ -118,7 +118,7 @@ const deleteAccount = async () => {
         <Link to="https://github.com/Nabeel-99/FoodRecipe.git" target="_blank"><FaGithub className="w-7 h-7 md:hidden"/></Link>
         {lightMode ? <button id="moon" onClick={toggleMode} ><FaMoon className="w-7 h-7 md:hidden"/></button>: 
           <button id="sun" onClick={toggleMode}>
-            <TbBrightnessUp className="w-7 h-7 md:hidden" />
+            <FaSun className="w-7 h-7 md:hidden" />
             </button> }
         <button  onClick={displayBurgerMenu} className="transition duration-75 ease-in-out">
           {burgerMenu ?  <FaXmark className="w-7 h-9 md:hidden"/> : <FaBars className="w-7 h-7 md:hidden"/> }
@@ -251,7 +251,7 @@ const deleteAccount = async () => {
           )}
         </div>
         <div className="flex  gap-3 items-center justify-center">
-          {lightMode ? <button id="moon" onClick={toggleMode}><FaMoon className="w-7 h-7"/></button> :  <button id="sun" onClick={toggleMode}><TbBrightnessUp className="w-7 h-7 " /></button>  }
+          {lightMode ? <button id="moon" onClick={toggleMode}><FaMoon className="w-7 h-7"/></button> :  <button id="sun" onClick={toggleMode}><FaSun className="w-7 h-7 " /></button>  }
           <Link to="https://github.com/Nabeel-99/FoodRecipe.git" target="_blank"><FaGithub className="w-7 h-7 "/></Link>
         </div>
        </div>
